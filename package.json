@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-boilerplate",
+  "name": "unempolyment-pulse",
   "version": "1.0.0",
-  "description": "Start React+Redux project with TypeScript in an easier and faster way",
+  "description": "visualize latest 14 months of unemployment statistics from the U.S. Bureau of Labor Statistics.",
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests",
@@ -23,15 +23,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vannizhang/react-redux-boilerplate.git"
+    "url": "git+https://github.com/vannizhang/unemployment-pulse.git"
   },
   "keywords": [],
   "author": "Jinnan Zhang",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vannizhang/react-redux-boilerplate/issues"
+    "url": "https://github.com/vannizhang/unemployment-pulse/issues"
   },
-  "homepage": "https://github.com/vannizhang/react-redux-boilerplate",
+  "homepage": "https://github.com/vannizhang/unemployment-pulse",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",

@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "sourceMap": false,
+        "resolveJsonModule": true,
+        "outDir": "compiled",
+        "types": [
+            "node"
+        ],
+        "typeRoots": [  
+            "./types"
+        ],
+        "lib": ["es2015", "dom"],
+    },
+    "exclude": [
+        "node_modules", 
+        "../src/**/**/*"
+    ],
+    "include": [
+        "./src/**/**/*"
+    ]
+}

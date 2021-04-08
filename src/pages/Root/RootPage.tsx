@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { AppLayout } from '../../components';
+
 const RootPage = () => {
-    return <h1>React Redux Boilerplate</h1>;
+    return <AppLayout />;
 };
 
 export default RootPage;

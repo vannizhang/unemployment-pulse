@@ -5,6 +5,10 @@ const LAYER_ID_US = '0';
 const LAYER_ID_STATE = '1';
 const LAYER_ID_COUNTIES = '2';
 
+import {
+    BasicFeature
+} from '../../shared/types';
+
 type MonthlyUnemploymentFeature = {
     attributes: {
         fips: string;
@@ -52,18 +56,6 @@ type MonthlyUnemploymentFeature = {
 
 type QueryResult = {
     features: MonthlyUnemploymentFeature[]
-}
-
-export type BasicFeature = {
-    attributes?: {
-        fips: string;
-        name: string;
-        currentMonth: string;
-    };
-    geometry?: {
-        x: number;
-        y: number;
-    };
 }
 
 type UnempolymentData = BasicFeature & {

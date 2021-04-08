@@ -1,16 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
-import { MonthlyUmempolymentDataPaths } from '../calculatePaths';
+import { MonthlyUmempolymentDataPaths } from '../../../shared/types';
 import {
     MonthlyUmempolymentData
 } from '../donwload-data';
 
+import { 
+    UNEMPLOYMENT_COUNTIES_FILE_NAME, 
+    UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME,
+    UNEMPLOYMENT_PATHS_STATES_FILE_NAME, 
+    UNEMPLOYMENT_STATES_FILE_NAME 
+} from '../../../shared/constants';
+
 const PUBLIC_FOLDER_PATH = path.join(__dirname, '../../../public');
-const OUTPUT_JSON_US_COUNTIES = path.join(PUBLIC_FOLDER_PATH, 'unemployment-counties.json');
-const OUTPUT_JSON_US_COUNTIES_PATHS = path.join(PUBLIC_FOLDER_PATH, 'unemployment-counties-paths.json');
-const OUTPUT_JSON_US_STATES = path.join(PUBLIC_FOLDER_PATH, 'unemployment-states.json');
-const OUTPUT_JSON_US_STATES_PATHS = path.join(PUBLIC_FOLDER_PATH, 'unemployment-states-paths.json');
+const OUTPUT_JSON_US_COUNTIES = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_COUNTIES_FILE_NAME);
+const OUTPUT_JSON_US_COUNTIES_PATHS = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME);
+const OUTPUT_JSON_US_STATES = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_STATES_FILE_NAME);
+const OUTPUT_JSON_US_STATES_PATHS = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_PATHS_STATES_FILE_NAME);
 
 export const saveCountiesData = (data:MonthlyUmempolymentData)=>{
     writeToJson(data, OUTPUT_JSON_US_COUNTIES);

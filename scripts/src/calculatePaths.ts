@@ -1,31 +1,13 @@
-import { MonthlyUmempolymentData, BasicFeature } from "./donwload-data";
+import { MonthlyUmempolymentData } from "./donwload-data";
 
-type PathFrame = {
-    xmin: number;
-    ymin: number;
-    xmax: number;
-    ymax: number;
-}
+import {
+    PathFrame,
+    PathData,
+    FeatureWithPathData,
+    MonthlyUmempolymentDataPaths
+} from '../../shared/types'
 
-type PathData = {
-    path: number[][];
-    frame?: PathFrame;
-}
-
-type FeatureWithPathData = BasicFeature & {
-    PctUnemployed: PathData;
-    LaborForce: PathData;
-}
-
-export type MonthlyUmempolymentDataPaths = {
-    features: FeatureWithPathData[];
-    frames:{
-        PctUnemployed: PathFrame;
-        LaborForce: PathFrame;
-    }
-}
-
-const calculatePath = (values: number[], ymax:number, xyRatio=1): PathData=>{
+const calculatePath = (values: number[], ymax:number, xyRatio=1):PathData =>{
 
     const ymaxFromValues = values.reduce((prev, curr) => Math.max(prev, curr), Number.NEGATIVE_INFINITY);
     const yRatio = ymaxFromValues > ymax ? ymax / ymaxFromValues : 1;

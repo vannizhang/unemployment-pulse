@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
+import { MonthlyUmempolymentDataPaths } from '../calculatePaths';
 import {
     MonthlyUmempolymentData
-} from '../donwload-data'
+} from '../donwload-data';
 
 const PUBLIC_FOLDER_PATH = path.join(__dirname, '../../../public');
 const OUTPUT_JSON_US_COUNTIES = path.join(PUBLIC_FOLDER_PATH, 'unemployment-counties.json');
@@ -17,6 +18,14 @@ export const saveCountiesData = (data:MonthlyUmempolymentData)=>{
 
 export const saveStatesData = (data:MonthlyUmempolymentData)=>{
     writeToJson(data, OUTPUT_JSON_US_STATES);
+};
+
+export const savePathsData4States = (data:MonthlyUmempolymentDataPaths)=>{
+    writeToJson(data, OUTPUT_JSON_US_STATES_PATHS);
+};
+
+export const savePathsData4Counties = (data:MonthlyUmempolymentDataPaths)=>{
+    writeToJson(data, OUTPUT_JSON_US_COUNTIES_PATHS);
 };
 
 const writeToJson = (data:any, outputPath)=>{

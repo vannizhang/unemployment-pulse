@@ -50,11 +50,11 @@ type MonthlyUnemploymentFeature = {
     }
 }
 
-type MonthlyUnemploymentQueryResult = {
+type QueryResult = {
     features: MonthlyUnemploymentFeature[]
 }
 
-type MonthlyUmempolymentDataItem = {
+export type BasicFeature = {
     attributes?: {
         fips: string;
         name: string;
@@ -64,12 +64,15 @@ type MonthlyUmempolymentDataItem = {
         x: number;
         y: number;
     };
+}
+
+type UnempolymentData = BasicFeature & {
     PctUnemployed: number[];
     LaborForce: number[];
 }
 
 export type MonthlyUmempolymentData = {
-    data: MonthlyUmempolymentDataItem[];
+    data: UnempolymentData[];
     maxPctUnemployed: number;
     maxLaborForce: number;
 }
@@ -90,7 +93,7 @@ const QueryParams = `f=json&where=1=1&returnGeometry=false&returnCentroid=true&o
 
 export const fecthData4States = async():Promise<MonthlyUmempolymentData>=>{
     try{
-        const { data } = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_STATE}/query`, { params: queryParams });
+        const { data } = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_STATE}/query`, { params: queryParams });
         return processQueryResult(data.features);
     } catch(err){
         console.error(err)
@@ -102,9 +105,9 @@ export const fecthData4States = async():Promise<MonthlyUmempolymentData>=>{
 export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
     try {
 
-        const response4Counties1 = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
+        const response4Counties1 = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
 
-        const response4Counties2 = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
+        const response4Counties2 = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
 
         const features = [
             ...response4Counties1.data.features,
@@ -129,7 +132,7 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
     let maxLaborForce = 0;
     let maxPctUnemployed = 0;
 
-    const data:MonthlyUmempolymentDataItem[] = features.map(feature=>{
+    const data:UnempolymentData[] = features.map(feature=>{
 
         const {
             attributes,

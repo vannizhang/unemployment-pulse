@@ -5,18 +5,24 @@ import {
 
 import {
     saveCountiesData,
-    saveStatesData
-} from './utils/file'
+    saveStatesData,
+    savePathsData4States,
+    savePathsData4Counties
+} from './utils/file';
+
+import {
+    convertUnemploymentDataToPaths
+} from './calculatePaths';
 
 const start = async()=>{
 
     try {
         // fetch data from ArcGIS Online Hosted feature service
         const data4states = await fecthData4States();
+        saveStatesData(data4states);
 
-        // save fetched data into a .json file
-        saveStatesData(data4states)
-
+        const paths4States = convertUnemploymentDataToPaths(data4states);
+        savePathsData4States(paths4States)
         // const data4counties = await fetchData4Counties();
 
     } catch(err){

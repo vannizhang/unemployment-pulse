@@ -7,7 +7,8 @@
     "test": "jest --passWithNoTests",
     "start": "webpack-dev-server --mode development --open",
     "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "download-data": "tsc -p ./scripts/tsconfig.json && node ./scripts/compiled/index.js"
   },
   "husky": {
     "hooks": {

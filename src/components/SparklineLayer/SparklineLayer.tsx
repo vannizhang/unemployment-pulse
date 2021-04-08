@@ -106,7 +106,7 @@ const SparklineLayer: React.FC<Props> = ({
 
                     const { path } = pathData;
 
-                    const color = [200, 200, 50, 255];
+                    const color = [255, 50, 50, 255];
 
                     // Create the CIM symbol:
                     //  - set the size value

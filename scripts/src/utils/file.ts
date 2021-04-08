@@ -6,12 +6,12 @@ import {
     MonthlyUmempolymentData
 } from '../donwload-data';
 
-import { 
-    UNEMPLOYMENT_COUNTIES_FILE_NAME, 
+import {
+    UNEMPLOYMENT_COUNTIES_FILE_NAME,
     UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME,
-    UNEMPLOYMENT_PATHS_STATES_FILE_NAME, 
-    UNEMPLOYMENT_STATES_FILE_NAME 
-} from '../../../shared/constants';
+    UNEMPLOYMENT_STATES_FILE_NAME,
+    UNEMPLOYMENT_PATHS_STATES_FILE_NAME
+} from '../constants'
 
 const PUBLIC_FOLDER_PATH = path.join(__dirname, '../../../public');
 const OUTPUT_JSON_US_COUNTIES = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_COUNTIES_FILE_NAME);

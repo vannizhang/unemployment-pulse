@@ -8,9 +8,9 @@ import {
     UNEMPLOYMENT_PATHS_STATES_FILE_NAME,
 } from '../../shared/constants';
 
-type AppContextValue = {
+export type AppContextValue = {
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
-    // unemploymentDataPathsCounties?: MonthlyUmempolymentDataPaths;
+    unemploymentDataPathsCounties?: MonthlyUmempolymentDataPaths;
 };
 
 type AppContextProviderProps = {
@@ -30,9 +30,15 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 MonthlyUmempolymentDataPaths
             >(`./public/${UNEMPLOYMENT_PATHS_STATES_FILE_NAME}`);
 
+            const resUmempolymentDataPaths4Counties = await axios.get<
+                MonthlyUmempolymentDataPaths
+            >(`./public/${UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME}`);
+
             setValue({
                 unemploymentDataPathsStates:
                     resUmempolymentDataPaths4States.data,
+                unemploymentDataPathsCounties:
+                    resUmempolymentDataPaths4Counties.data,
             });
         } catch (err) {
             console.error(err);

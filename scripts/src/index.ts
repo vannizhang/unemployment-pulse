@@ -25,6 +25,12 @@ const start = async()=>{
         savePathsData4States(paths4States)
         // const data4counties = await fetchData4Counties();
 
+        const data4Counties = await fetchData4Counties();
+        saveCountiesData(data4Counties);
+
+        const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
+        savePathsData4Counties(paths4Counties);
+
     } catch(err){
         console.error(err);
     }

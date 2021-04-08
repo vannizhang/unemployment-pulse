@@ -54,7 +54,7 @@ type MonthlyUnemploymentQueryResult = {
     features: MonthlyUnemploymentFeature[]
 }
 
-export type MonthlyUmempolymentData = {
+type MonthlyUmempolymentDataItem = {
     attributes?: {
         fips: string;
         name: string;
@@ -66,6 +66,12 @@ export type MonthlyUmempolymentData = {
     };
     PctUnemployed: number[];
     LaborForce: number[];
+}
+
+export type MonthlyUmempolymentData = {
+    data: MonthlyUmempolymentDataItem[];
+    maxPctUnemployed: number;
+    maxLaborForce: number;
 }
 
 const outFields = 'fips, LaborForce_CurrentMonth, LaborForce_01Month, LaborForce_02Month, LaborForce_03Month, LaborForce_04Month, LaborForce_05Month, LaborForce_06Month, LaborForce_02Month,LaborForce_07Month, LaborForce_08Month, LaborForce_09Month, LaborForce_10Month, LaborForce_11Month, LaborForce_12Month, LaborForce_13Month, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month';
@@ -82,40 +88,48 @@ const queryParams = {
 
 const QueryParams = `f=json&where=1=1&returnGeometry=false&returnCentroid=true&outSR=4326&outFields=${outFields}`;
 
-export const fecthData4States = async():Promise<MonthlyUmempolymentData[]>=>{
+export const fecthData4States = async():Promise<MonthlyUmempolymentData>=>{
     try{
         const { data } = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_STATE}/query`, { params: queryParams });
-        return processQueryResult(data);
+        return processQueryResult(data.features);
     } catch(err){
         console.error(err)
     }
 
-    return [];
+    return null;
 }
 
-export const fetchData4Counties = async():Promise<MonthlyUmempolymentData[]>=>{
+export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
     try {
 
         const response4Counties1 = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
 
         const response4Counties2 = await axios.get<MonthlyUnemploymentQueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
 
-        return [
-            ...processQueryResult(response4Counties1.data),
-            ...processQueryResult(response4Counties2.data)
+        const features = [
+            ...response4Counties1.data.features,
+            ...response4Counties2.data.features
         ];
+
+        return processQueryResult(features)
 
     } catch(err){
         console.error(err)
     }
 
-    return [];
+    return null;
 }
 
-const processQueryResult = (result:MonthlyUnemploymentQueryResult):MonthlyUmempolymentData[]=>{
-    const { features } = result;
+const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempolymentData=>{
 
-    return features.map(feature=>{
+    if(!features || !features.length){
+        return;
+    }
+
+    let maxLaborForce = 0;
+    let maxPctUnemployed = 0;
+
+    const data:MonthlyUmempolymentDataItem[] = features.map(feature=>{
 
         const {
             attributes,
@@ -172,6 +186,8 @@ const processQueryResult = (result:MonthlyUnemploymentQueryResult):MonthlyUmempo
             PctUnemployed_CurrentMonth
         ];
 
+        maxPctUnemployed = Math.max(maxPctUnemployed, Math.max(...PctUnemployed))
+
         const LaborForce = [
             LaborForce_13Month,
             LaborForce_12Month,
@@ -188,6 +204,8 @@ const processQueryResult = (result:MonthlyUnemploymentQueryResult):MonthlyUmempo
             LaborForce_01Month,
             LaborForce_CurrentMonth
         ];
+
+        maxLaborForce = Math.max(maxLaborForce, Math.max(...LaborForce))
 
         const {
             x, y
@@ -206,5 +224,11 @@ const processQueryResult = (result:MonthlyUnemploymentQueryResult):MonthlyUmempo
             PctUnemployed,
             LaborForce
         };
-    })
+    });
+
+    return {
+        data,
+        maxLaborForce,
+        maxPctUnemployed
+    }
 };

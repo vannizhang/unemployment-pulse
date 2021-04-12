@@ -83,9 +83,13 @@ const queryParams = {
 
 const QueryParams = `f=json&where=1=1&returnGeometry=false&returnCentroid=true&outSR=4326&outFields=${outFields}`;
 
-export const fecthData4States = async():Promise<MonthlyUmempolymentData>=>{
+// use this function to fetch data for all 50 states or the entire US
+export const fecthData4States = async(shouldFetchNationalAverage=false):Promise<MonthlyUmempolymentData>=>{
+
+    const layerId = shouldFetchNationalAverage ? LAYER_ID_US : LAYER_ID_STATE;
+
     try{
-        const { data } = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_STATE}/query`, { params: queryParams });
+        const { data } = await axios.get<QueryResult>(`${SERVICE_URL}/${layerId}/query`, { params: queryParams });
         return processQueryResult(data.features);
     } catch(err){
         console.error(err)

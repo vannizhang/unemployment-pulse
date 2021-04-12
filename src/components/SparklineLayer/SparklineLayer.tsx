@@ -149,6 +149,55 @@ const SparklineLayer: React.FC<Props> = ({
                                             },
                                         ],
                                     },
+                                    // {
+                                    //     type: 'CIMVectorMarker',
+                                    //     anchorPoint: {
+                                    //         x: 0,
+                                    //         y: -0.5,
+                                    //     },
+                                    //     anchorPointUnits: 'Relative',
+                                    //     enable: true,
+                                    //     scaleSymbolsProportionally: false,
+                                    //     respectFrame: true,
+                                    //     size,
+                                    //     frame,
+                                    //     markerGraphics: [
+                                    //         {
+                                    //             type: 'CIMMarkerGraphic',
+                                    //             geometry: {
+                                    //                 paths: [
+                                    //                     [
+                                    //                         [0,4],
+                                    //                         [2,4],
+                                    //                         [4,4],
+                                    //                         [6,15],
+                                    //                         [8,17],
+                                    //                         [11,10],
+                                    //                         [13,9],
+                                    //                         [15,7],
+                                    //                         [17,7],
+                                    //                         [19,5],
+                                    //                         [21,4],
+                                    //                         [23,4],
+                                    //                         [25,3],
+                                    //                         [28,3]
+                                    //                     ]
+                                    //                 ],
+                                    //             },
+                                    //             symbol: {
+                                    //                 type: 'CIMLineSymbol',
+                                    //                 symbolLayers: [
+                                    //                     {
+                                    //                         type:
+                                    //                             'CIMSolidStroke',
+                                    //                         width: .5,
+                                    //                         color: [50,50,50,100],
+                                    //                     },
+                                    //                 ],
+                                    //             },
+                                    //         },
+                                    //     ],
+                                    // }
                                 ],
                             },
                         },

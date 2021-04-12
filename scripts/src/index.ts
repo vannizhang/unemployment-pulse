@@ -7,7 +7,9 @@ import {
     saveCountiesData,
     saveStatesData,
     savePathsData4States,
-    savePathsData4Counties
+    savePathsData4Counties,
+    savePathsData4US,
+    saveData4US
 } from './utils/file';
 
 import {
@@ -30,6 +32,12 @@ const start = async()=>{
 
         const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
         savePathsData4Counties(paths4Counties);
+
+        const data4US = await fecthData4States(true);
+        saveData4US(data4US);
+
+        const paths4US = convertUnemploymentDataToPaths(data4US);
+        savePathsData4US(paths4US)
 
     } catch(err){
         console.error(err);

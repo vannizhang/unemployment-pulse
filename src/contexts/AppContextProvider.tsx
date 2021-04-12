@@ -6,9 +6,11 @@ import { MonthlyUmempolymentDataPaths } from '../../shared/types';
 import {
     UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME,
     UNEMPLOYMENT_PATHS_STATES_FILE_NAME,
+    UNEMPLOYMENT_PATHS_US_FILE_NAME,
 } from '../../shared/constants';
 
 export type AppContextValue = {
+    unemploymentDataPathsUS: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsCounties?: MonthlyUmempolymentDataPaths;
 };
@@ -34,27 +36,21 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 MonthlyUmempolymentDataPaths
             >(`./public/${UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME}`);
 
+            const resUmempolymentDataPaths4US = await axios.get<
+                MonthlyUmempolymentDataPaths
+            >(`./public/${UNEMPLOYMENT_PATHS_US_FILE_NAME}`);
+
             setValue({
                 unemploymentDataPathsStates:
                     resUmempolymentDataPaths4States.data,
                 unemploymentDataPathsCounties:
                     resUmempolymentDataPaths4Counties.data,
+                unemploymentDataPathsUS: resUmempolymentDataPaths4US.data,
             });
         } catch (err) {
             console.error(err);
         }
     };
-
-    // const [value, setValue] = useState<AppContextValue>({
-    //     // darkMode: false,
-    // });
-
-    // const init = async () => {
-    //     // const contextValue: AppContextValue = {
-    //     //     darkMode: false
-    //     // };
-    //     // setValue(contextValue);
-    // };
 
     React.useEffect(() => {
         loadAppData();

@@ -16,17 +16,20 @@ const AppLayout = () => {
     const {
         unemploymentDataPathsStates,
         unemploymentDataPathsCounties,
+        unemploymentDataPathsUS,
     } = useContext<AppContextValue>(AppContext);
 
     return (
         <>
             <MapView webmapId={WEB_MAP_ID}>
                 <SparklineLayer
+                    nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsStates}
                     visibleScale={VISIBLE_SCALE_STATES}
                 />
 
                 <SparklineLayer
+                    nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsCounties}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
                 />

@@ -39,7 +39,7 @@ const start = async()=>{
         const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
         savePathsData4Counties(paths4Counties);
 
-        const paths4US = convertUnemploymentDataToPaths(data4US);
+        const paths4US = convertUnemploymentDataToPaths(data4US, 29.7);
         savePathsData4US(paths4US)
 
     } catch(err){

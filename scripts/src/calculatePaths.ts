@@ -57,13 +57,14 @@ const calculatePath = ({
     
 }
 
-export const convertUnemploymentDataToPaths = (monthlyUmempolymentData: MonthlyUmempolymentData):MonthlyUmempolymentDataPaths=>{
+export const convertUnemploymentDataToPaths = (monthlyUmempolymentData: MonthlyUmempolymentData, maxPctUnemployed?:number):MonthlyUmempolymentDataPaths=>{
 
     const { 
         data, 
-        maxPctUnemployed,
         maxPctUnemployedDeviation
     } = monthlyUmempolymentData;
+
+    maxPctUnemployed = maxPctUnemployed || monthlyUmempolymentData.maxPctUnemployed
 
     let framePctUnemployed:PathFrame;
     let framePctUnemployedDeviation:PathFrame;

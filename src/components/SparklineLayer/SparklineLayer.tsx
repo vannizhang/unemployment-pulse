@@ -299,7 +299,7 @@ const SparklineLayer: React.FC<Props> = ({
                 draw();
             }
         }
-    }, [layerRef, data]);
+    }, [layerRef, data, showDeviation]);
 
     useEffect(() => {
         if (

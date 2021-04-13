@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { MapView } from '../ArcGIS';
 
-import { SparklineLayer } from '../';
+import { SparklineLayer, SparklineLayerSwitcher } from '../';
 
 import {
     VISIBLE_SCALE_COUNTIES,
@@ -19,7 +19,7 @@ const AppLayout = () => {
         unemploymentDataPathsUS,
     } = useContext<AppContextValue>(AppContext);
 
-    const [showDeviation, setShowDeviation] = useState<boolean>(true);
+    const [showDeviation, setShowDeviation] = useState<boolean>(false);
 
     return (
         <>
@@ -38,6 +38,11 @@ const AppLayout = () => {
                     visibleScale={VISIBLE_SCALE_COUNTIES}
                 />
             </MapView>
+
+            <SparklineLayerSwitcher
+                showDeviation={showDeviation}
+                onChange={setShowDeviation.bind(this, !showDeviation)}
+            />
         </>
     );
 };

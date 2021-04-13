@@ -57,13 +57,19 @@ const calculatePath = ({
     
 }
 
-export const convertUnemploymentDataToPaths = (monthlyUmempolymentData: MonthlyUmempolymentData, maxPctUnemployed?:number):MonthlyUmempolymentDataPaths=>{
+export const convertUnemploymentDataToPaths = (
+    monthlyUmempolymentData: MonthlyUmempolymentData, 
+    maxPctUnemployed?:number
+):MonthlyUmempolymentDataPaths=>{
 
     const { 
         data, 
         maxPctUnemployedDeviation
     } = monthlyUmempolymentData;
 
+    // for counties and states data, we can just use maxPctUnemployed from monthlyUmempolymentData
+    // but need to use customized maxPctUnemployed for the national level data so it can be fit into the 
+    // same frame of the counties and states sparklines
     maxPctUnemployed = maxPctUnemployed || monthlyUmempolymentData.maxPctUnemployed
 
     let framePctUnemployed:PathFrame;

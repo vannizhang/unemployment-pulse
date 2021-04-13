@@ -114,7 +114,7 @@ const SparklineLayer: React.FC<Props> = ({
 
                     const { path } = pathData;
 
-                    const color = [255, 50, 50, 255];
+                    const color = [50, 100, 255, 255];
 
                     // Create the CIM symbol:
                     //  - set the size value
@@ -183,7 +183,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                         {
                                                             type:
                                                                 'CIMSolidStroke',
-                                                            width: 0.5,
+                                                            width: 1,
                                                             color: [
                                                                 50,
                                                                 50,

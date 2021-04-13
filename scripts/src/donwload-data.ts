@@ -13,21 +13,6 @@ type MonthlyUnemploymentFeature = {
     attributes: {
         fips: string;
 
-        LaborForce_CurrentMonth : number;
-        LaborForce_01Month : number;
-        LaborForce_02Month : number;
-        LaborForce_03Month : number;
-        LaborForce_04Month : number;
-        LaborForce_05Month : number;
-        LaborForce_06Month : number;
-        LaborForce_07Month : number;
-        LaborForce_08Month : number;
-        LaborForce_09Month : number;
-        LaborForce_10Month : number;
-        LaborForce_11Month : number;
-        LaborForce_12Month : number;
-        LaborForce_13Month : number;
-
         PctUnemployed_CurrentMonth: number;
         PctUnemployed_01Month : number;
         PctUnemployed_02Month : number;
@@ -60,16 +45,15 @@ type QueryResult = {
 
 type UnempolymentData = BasicFeature & {
     PctUnemployed: number[];
-    LaborForce: number[];
+    PctUnemployedDeviation?: number[];
 }
 
 export type MonthlyUmempolymentData = {
     data: UnempolymentData[];
     maxPctUnemployed: number;
-    maxLaborForce: number;
 }
 
-const outFields = 'fips, LaborForce_CurrentMonth, LaborForce_01Month, LaborForce_02Month, LaborForce_03Month, LaborForce_04Month, LaborForce_05Month, LaborForce_06Month, LaborForce_02Month,LaborForce_07Month, LaborForce_08Month, LaborForce_09Month, LaborForce_10Month, LaborForce_11Month, LaborForce_12Month, LaborForce_13Month, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month';
+const outFields = 'fips, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month';
 
 const queryParams = {
     f: 'json',
@@ -125,7 +109,6 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
         return;
     }
 
-    let maxLaborForce = 0;
     let maxPctUnemployed = 0;
 
     const data:UnempolymentData[] = features.map(feature=>{
@@ -136,22 +119,7 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
         } = feature;
 
         const { 
-            fips, 
-            CurrentMonth,
-            LaborForce_CurrentMonth,
-            LaborForce_01Month,
-            LaborForce_02Month,
-            LaborForce_03Month,
-            LaborForce_04Month,
-            LaborForce_05Month,
-            LaborForce_06Month,
-            LaborForce_07Month,
-            LaborForce_08Month,
-            LaborForce_09Month,
-            LaborForce_10Month,
-            LaborForce_11Month,
-            LaborForce_12Month,
-            LaborForce_13Month,
+            fips,
             PctUnemployed_CurrentMonth,
             PctUnemployed_01Month,
             PctUnemployed_02Month,
@@ -187,25 +155,6 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
 
         maxPctUnemployed = Math.max(maxPctUnemployed, Math.max(...PctUnemployed))
 
-        const LaborForce = [
-            LaborForce_13Month,
-            LaborForce_12Month,
-            LaborForce_11Month,
-            LaborForce_10Month,
-            LaborForce_09Month,
-            LaborForce_08Month,
-            LaborForce_07Month,
-            LaborForce_06Month,
-            LaborForce_05Month,
-            LaborForce_04Month,
-            LaborForce_03Month,
-            LaborForce_02Month,
-            LaborForce_01Month,
-            LaborForce_CurrentMonth
-        ];
-
-        maxLaborForce = Math.max(maxLaborForce, Math.max(...LaborForce))
-
         const {
             x, y
         } = centroid;
@@ -213,21 +162,18 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
         return {
             attributes: {
                 fips,
-                name: '',
-                currentMonth: CurrentMonth
+                name: ''
             },
             geometry: {
                 x: +x.toFixed(5),
                 y: +y.toFixed(5)
             },
             PctUnemployed,
-            LaborForce
         };
     });
 
     return {
         data,
-        maxLaborForce,
         maxPctUnemployed
     }
 };

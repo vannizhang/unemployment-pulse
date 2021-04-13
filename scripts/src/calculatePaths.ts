@@ -49,36 +49,28 @@ export const convertUnemploymentDataToPaths = (monthlyUmempolymentData: MonthlyU
 
     const { 
         data, 
-        maxLaborForce, 
         maxPctUnemployed 
     } = monthlyUmempolymentData;
 
     let framePctUnemployed:PathFrame;
-    let frameLaborForce:PathFrame;
 
     const features:FeatureWithPathData[] = data.map(d=>{
 
         const { 
             geometry,
             attributes,
-            LaborForce,
             PctUnemployed
         } = d;
 
         const pathPctUnemployed = calculatePath(PctUnemployed, maxPctUnemployed);
-        const pathLaborForce = calculatePath(LaborForce, maxLaborForce);
 
         framePctUnemployed = framePctUnemployed || pathPctUnemployed.frame;
-        frameLaborForce = frameLaborForce || pathLaborForce.frame;
 
         return {
             attributes,
             geometry,
             PctUnemployed: {
                 path: pathPctUnemployed.path
-            },
-            LaborForce: {
-                path: pathLaborForce.path
             }
         }
     })
@@ -87,7 +79,6 @@ export const convertUnemploymentDataToPaths = (monthlyUmempolymentData: MonthlyU
         features,
         frames: {
             PctUnemployed: framePctUnemployed,
-            LaborForce: frameLaborForce
         }
     }
 }

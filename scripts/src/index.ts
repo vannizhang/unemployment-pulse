@@ -19,6 +19,13 @@ import {
 const start = async()=>{
 
     try {
+
+        const data4US = await fecthData4States(true);
+        saveData4US(data4US);
+
+        const paths4US = convertUnemploymentDataToPaths(data4US);
+        savePathsData4US(paths4US)
+
         // fetch data from ArcGIS Online Hosted feature service
         const data4states = await fecthData4States();
         saveStatesData(data4states);
@@ -32,12 +39,6 @@ const start = async()=>{
 
         const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
         savePathsData4Counties(paths4Counties);
-
-        const data4US = await fecthData4States(true);
-        saveData4US(data4US);
-
-        const paths4US = convertUnemploymentDataToPaths(data4US);
-        savePathsData4US(paths4US)
 
     } catch(err){
         console.error(err);

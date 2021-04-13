@@ -1,4 +1,6 @@
 ## Unempolyment Data
 
-- downlaod data
-- transform into JSON files that can be rendered as sparklines
+Run this command to download unemployment data and convert them to sparkline paths
+```
+npm run download-data
+```

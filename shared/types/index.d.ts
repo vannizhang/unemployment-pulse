@@ -2,7 +2,7 @@ export type BasicFeature = {
     attributes?: {
         fips: string;
         name: string;
-        currentMonth: string;
+        // currentMonth: string;
     };
     geometry?: {
         x: number;
@@ -24,13 +24,11 @@ export type PathData = {
 
 export type FeatureWithPathData = BasicFeature & {
     PctUnemployed: PathData;
-    LaborForce: PathData;
 }
 
 export type MonthlyUmempolymentDataPaths = {
     features: FeatureWithPathData[];
     frames:{
         PctUnemployed: PathFrame;
-        LaborForce: PathFrame;
     }
 }

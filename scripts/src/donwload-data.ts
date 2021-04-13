@@ -51,6 +51,7 @@ type UnempolymentData = BasicFeature & {
 export type MonthlyUmempolymentData = {
     data: UnempolymentData[];
     maxPctUnemployed: number;
+    maxPctUnemployedDeviation?: number;
 }
 
 const outFields = 'fips, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month';
@@ -177,3 +178,41 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
         maxPctUnemployed
     }
 };
+
+export const addDeviationData = (monthlyUnemploymentData:MonthlyUmempolymentData, nationalUnemploymentData:MonthlyUmempolymentData):MonthlyUmempolymentData=>{
+
+    const pctUnemployedFromNationalData = nationalUnemploymentData.data[0].PctUnemployed;
+
+    if(!pctUnemployedFromNationalData || !pctUnemployedFromNationalData.length){
+        console.error('failed to calc deviation data - national unemployment data are not available');
+        return;
+    }
+
+    let maxPctUnemployedDeviation = 0;
+
+    monthlyUnemploymentData.data = monthlyUnemploymentData.data.map(d=>{
+
+        const { PctUnemployed } = d;
+
+        const PctUnemployedDeviation = PctUnemployed.map((pctUnemployed, idx)=>{
+            const pctUnemployedNational = pctUnemployedFromNationalData[idx];
+            const deviation = +(pctUnemployed - pctUnemployedNational).toFixed(2);
+
+            if(Math.abs(deviation) > maxPctUnemployedDeviation){
+                maxPctUnemployedDeviation = Math.abs(deviation)
+            }
+
+            return deviation;
+        });
+
+        return {
+            ...d,
+            PctUnemployedDeviation,
+        }
+    })
+
+    return {
+        ...monthlyUnemploymentData,
+        maxPctUnemployedDeviation
+    };
+}

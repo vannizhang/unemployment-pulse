@@ -3,6 +3,7 @@ import React from 'react';
 import { loadModules, loadCss } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import IWebMap from 'esri/WebMap';
+import IwatchUtils from 'esri/core/watchUtils';
 
 interface Props {
     webmapId: string;
@@ -40,10 +41,52 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
         }
     };
 
+    const addWatchEvent = async () => {
+        type Modules = [typeof IwatchUtils];
+
+        try {
+            const [watchUtils] = await (loadModules([
+                'esri/core/watchUtils',
+            ]) as Promise<Modules>);
+
+            watchUtils.whenTrue(mapView, 'stationary', () => {
+                // console.log('mapview is stationary', mapView.center, mapView.zoom);
+
+                if (mapView.zoom === -1) {
+                    return;
+                }
+
+                // console.log(mapView.scale)
+
+                // const centerLocation: MapCenterLocation = {
+                //     lat:
+                //         mapView.center && mapView.center.latitude
+                //             ? +mapView.center.latitude.toFixed(3)
+                //             : 0,
+                //     lon:
+                //         mapView.center && mapView.center.longitude
+                //             ? +mapView.center.longitude.toFixed(3)
+                //             : 0,
+                //     zoom: mapView.zoom,
+                // };
+
+                // updateMapLocation(centerLocation);
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     React.useEffect(() => {
         loadCss();
         initMapView();
     }, []);
+
+    React.useEffect(() => {
+        if (mapView) {
+            addWatchEvent();
+        }
+    }, [mapView]);
 
     return (
         <>

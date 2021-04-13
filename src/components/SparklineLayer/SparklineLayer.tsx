@@ -79,7 +79,7 @@ const SparklineLayer: React.FC<Props> = ({
             nationalLevelData.features[0].PctUnemployed.path;
         const nationalLevelFrame = nationalLevelData.frames.PctUnemployed;
 
-        console.log(nationalLevelData);
+        // console.log(nationalLevelData);
 
         try {
             const [CIMSymbol, Graphic, Point] = await (loadModules([
@@ -90,7 +90,7 @@ const SparklineLayer: React.FC<Props> = ({
 
             const { features, frames } = data;
 
-            const frame = frames.PctUnemployed;
+            const frame = frames.PctUnemployedDeviation; // frames.PctUnemployed;
 
             const addGraphicsByChunk = (startIndex = 0) => {
                 // console.log('doChunk', startIndex)
@@ -106,11 +106,15 @@ const SparklineLayer: React.FC<Props> = ({
                 );
 
                 const graphics = data.map((feature) => {
-                    const { geometry, PctUnemployed } = feature;
+                    const {
+                        geometry,
+                        PctUnemployed,
+                        PctUnemployedDeviation,
+                    } = feature;
 
-                    const pathData = PctUnemployed;
+                    const pathData = PctUnemployedDeviation;
 
-                    const size = 30;
+                    const size = 60;
 
                     const { path } = pathData;
 
@@ -129,7 +133,7 @@ const SparklineLayer: React.FC<Props> = ({
                                         type: 'CIMVectorMarker',
                                         anchorPoint: {
                                             x: 0,
-                                            y: -0.5,
+                                            y: 0,
                                         },
                                         anchorPointUnits: 'Relative',
                                         enable: true,
@@ -157,24 +161,67 @@ const SparklineLayer: React.FC<Props> = ({
                                             },
                                         ],
                                     },
+                                    // {
+                                    //     type: 'CIMVectorMarker',
+                                    //     anchorPoint: {
+                                    //         x: 0,
+                                    //         y: -0.5,
+                                    //     },
+                                    //     anchorPointUnits: 'Relative',
+                                    //     enable: true,
+                                    //     scaleSymbolsProportionally: false,
+                                    //     respectFrame: true,
+                                    //     size,
+                                    //     frame: nationalLevelFrame,
+                                    //     markerGraphics: [
+                                    //         {
+                                    //             type: 'CIMMarkerGraphic',
+                                    //             geometry: {
+                                    //                 paths: [
+                                    //                     nationalLevelPathData,
+                                    //                 ],
+                                    //             },
+                                    //             symbol: {
+                                    //                 type: 'CIMLineSymbol',
+                                    //                 symbolLayers: [
+                                    //                     {
+                                    //                         type:
+                                    //                             'CIMSolidStroke',
+                                    //                         width: 1,
+                                    //                         color: [
+                                    //                             50,
+                                    //                             50,
+                                    //                             50,
+                                    //                             100,
+                                    //                         ],
+                                    //                     },
+                                    //                 ],
+                                    //             },
+                                    //         },
+                                    //     ],
+                                    // },
+
                                     {
                                         type: 'CIMVectorMarker',
                                         anchorPoint: {
                                             x: 0,
-                                            y: -0.5,
+                                            y: 0,
                                         },
                                         anchorPointUnits: 'Relative',
                                         enable: true,
                                         scaleSymbolsProportionally: false,
                                         respectFrame: true,
                                         size,
-                                        frame: nationalLevelFrame,
+                                        frame,
                                         markerGraphics: [
                                             {
                                                 type: 'CIMMarkerGraphic',
                                                 geometry: {
                                                     paths: [
-                                                        nationalLevelPathData,
+                                                        [
+                                                            [0, 0],
+                                                            [frame.xmax, 0],
+                                                        ],
                                                     ],
                                                 },
                                                 symbol: {
@@ -185,7 +232,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                                 'CIMSolidStroke',
                                                             width: 1,
                                                             color: [
-                                                                50,
+                                                                255,
                                                                 50,
                                                                 50,
                                                                 100,

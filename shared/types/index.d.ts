@@ -24,11 +24,13 @@ export type PathData = {
 
 export type FeatureWithPathData = BasicFeature & {
     PctUnemployed: PathData;
+    PctUnemployedDeviation?: PathData;
 }
 
 export type MonthlyUmempolymentDataPaths = {
     features: FeatureWithPathData[];
     frames:{
         PctUnemployed: PathFrame;
+        PctUnemployedDeviation?: PathFrame;
     }
 }

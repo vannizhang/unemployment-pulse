@@ -11,6 +11,10 @@ import {
 } from '../../constants/map';
 
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+import {
+    THEME_COLOR_BLUE_4_JSAPI,
+    THEME_COLOR_ORANGE_4_JSAPI,
+} from '../../constants/style';
 
 const AppLayout = () => {
     const {
@@ -29,6 +33,8 @@ const AppLayout = () => {
                     nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsStates}
                     visibleScale={VISIBLE_SCALE_STATES}
+                    color={THEME_COLOR_ORANGE_4_JSAPI}
+                    referenceLineColor={THEME_COLOR_BLUE_4_JSAPI}
                 />
 
                 <SparklineLayer
@@ -36,6 +42,8 @@ const AppLayout = () => {
                     nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsCounties}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
+                    color={THEME_COLOR_ORANGE_4_JSAPI}
+                    referenceLineColor={THEME_COLOR_BLUE_4_JSAPI}
                 />
             </MapView>
 

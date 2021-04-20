@@ -20,7 +20,8 @@ type Props = {
     // will be used to render national trend
     nationalLevelData: MonthlyUmempolymentDataPaths;
     showDeviation?: boolean;
-    // color?: string;
+    color: number[];
+    referenceLineColor: number[];
     visibleScale?: {
         min: number;
         max: number;
@@ -32,7 +33,8 @@ const SparklineLayer: React.FC<Props> = ({
     data,
     nationalLevelData,
     showDeviation,
-    // color,
+    color,
+    referenceLineColor,
     visibleScale,
     mapView,
 }) => {
@@ -129,7 +131,7 @@ const SparklineLayer: React.FC<Props> = ({
 
                     const { path } = pathData;
 
-                    const color = [50, 100, 255, 255];
+                    // const color = [50, 100, 255, 255];
 
                     // Create the CIM symbol:
                     //  - set the size value
@@ -194,12 +196,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                                   type:
                                                                       'CIMSolidStroke',
                                                                   width: 1,
-                                                                  color: [
-                                                                      255,
-                                                                      50,
-                                                                      50,
-                                                                      100,
-                                                                  ],
+                                                                  color: referenceLineColor,
                                                               },
                                                           ],
                                                       },
@@ -238,12 +235,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                                   type:
                                                                       'CIMSolidStroke',
                                                                   width: 1,
-                                                                  color: [
-                                                                      255,
-                                                                      50,
-                                                                      50,
-                                                                      100,
-                                                                  ],
+                                                                  color: referenceLineColor,
                                                               },
                                                           ],
                                                       },

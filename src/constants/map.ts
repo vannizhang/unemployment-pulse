@@ -1,4 +1,4 @@
-export const WEB_MAP_ID = '5f3b7605b3364e7bb2416c93fae00995';
+export const WEB_MAP_ID = '8054e038927a48419ee0dddb86006ad6';
 
 export const VISIBLE_SCALE_STATES = {
     min: 99999999,

@@ -6,8 +6,13 @@ const LAYER_ID_STATE = '1';
 const LAYER_ID_COUNTIES = '2';
 
 import {
-    BasicFeature
+    UnempolymentData, 
+    MonthlyUmempolymentData
 } from '../../shared/types';
+
+import {
+    getPopulationLookup
+} from './getPopulationData'
 
 type MonthlyUnemploymentFeature = {
     attributes: {
@@ -28,6 +33,9 @@ type MonthlyUnemploymentFeature = {
         PctUnemployed_12Month : number;
         PctUnemployed_13Month : number;
 
+        LaborForce_CurrentMonth: number;
+        Unemployed_CurrentMonth: number;
+
         CurrentMonth: string;
         P13Month: string;
 
@@ -43,18 +51,9 @@ type QueryResult = {
     features: MonthlyUnemploymentFeature[]
 }
 
-type UnempolymentData = BasicFeature & {
-    PctUnemployed: number[];
-    PctUnemployedDeviation?: number[];
-}
+const populationLookup = getPopulationLookup();
 
-export type MonthlyUmempolymentData = {
-    data: UnempolymentData[];
-    maxPctUnemployed: number;
-    maxPctUnemployedDeviation?: number;
-}
-
-const outFields = 'fips, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month';
+const outFields = 'fips, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month, LaborForce_CurrentMonth, Unemployed_CurrentMonth';
 
 const queryParams = {
     f: 'json',
@@ -112,6 +111,20 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
 
     let maxPctUnemployed = 0;
 
+    const pctUnemployedSorted = features
+        .map(feature=>{
+            const {
+                attributes,
+            } = feature;
+
+            const { 
+                PctUnemployed_CurrentMonth,
+            } = attributes;
+
+            return PctUnemployed_CurrentMonth
+        })
+        .sort((a,b)=>b-a);
+
     const data:UnempolymentData[] = features.map(feature=>{
 
         const {
@@ -135,6 +148,8 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
             PctUnemployed_11Month,
             PctUnemployed_12Month,
             PctUnemployed_13Month,
+            LaborForce_CurrentMonth,
+            Unemployed_CurrentMonth
         } = attributes;
 
         const PctUnemployed = [
@@ -160,15 +175,28 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempo
             x, y
         } = centroid;
 
+        const populationData = populationLookup[fips];
+
+        const name = populationData ? populationData.name : '';
+        const population = populationData ? populationData.population : 0;
+        const rank = binarySearchIdx(pctUnemployedSorted, PctUnemployed_CurrentMonth) + 1;
+
+        const geometry = {
+            x: +x.toFixed(5),
+            y: +y.toFixed(5)
+        };
+
         return {
             attributes: {
                 fips,
-                name: ''
+                name,
+                population,
+                workforce: LaborForce_CurrentMonth,
+                unemployed: Unemployed_CurrentMonth,
+                unemploymentRate: PctUnemployed_CurrentMonth,
+                rank
             },
-            geometry: {
-                x: +x.toFixed(5),
-                y: +y.toFixed(5)
-            },
+            geometry,
             PctUnemployed,
         };
     });
@@ -215,4 +243,21 @@ export const addDeviationData = (monthlyUnemploymentData:MonthlyUmempolymentData
         ...monthlyUnemploymentData,
         maxPctUnemployedDeviation
     };
+}
+// find index of target number from a desc sorted array, which will be used as rank
+const binarySearchIdx = (nums: number[], target:number):number=>{
+    let left = 0;
+    let right = nums.length - 1;
+
+    while(left <= right){
+        const midIdx = Math.floor((left + right) / 2);
+
+        if(target < nums[midIdx]){
+            left = midIdx + 1;
+        } else {
+            right = midIdx - 1;
+        }
+    }
+
+    return left;
 }

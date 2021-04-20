@@ -5,41 +5,46 @@ import {
 } from './donwload-data';
 
 import {
-    saveCountiesData,
-    saveStatesData,
     savePathsData4States,
     savePathsData4Counties,
     savePathsData4US,
-    saveData4US
+    // saveUnempolymentDataByFIPS
 } from './utils/file';
 
 import {
     convertUnemploymentDataToPaths
 } from './calculatePaths';
 
+import {
+    saveUnemploymentData
+} from './saveUnempolymentData2JSON'
+
 const start = async()=>{
 
     try {
         const data4US = await fecthData4States(true);
-        saveData4US(data4US);
 
         // fetch data from ArcGIS Online Hosted feature service
-        let data4states = await fecthData4States();
-        data4states = addDeviationData(data4states, data4US)
-        saveStatesData(data4states);
+        let data4States = await fecthData4States();
+        data4States = addDeviationData(data4States, data4US);
 
         let data4Counties = await fetchData4Counties();
-        data4Counties = addDeviationData(data4Counties, data4US)
-        saveCountiesData(data4Counties);
+        data4Counties = addDeviationData(data4Counties, data4US);
 
-        const paths4States = convertUnemploymentDataToPaths(data4states);
+        saveUnemploymentData([
+            ...data4US.data,
+            ...data4States.data,
+            ...data4Counties.data
+        ])
+
+        const paths4States = convertUnemploymentDataToPaths(data4States);
         savePathsData4States(paths4States)
         // const data4counties = await fetchData4Counties();
 
         const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
         savePathsData4Counties(paths4Counties);
 
-        const paths4US = convertUnemploymentDataToPaths(data4US, data4states.maxPctUnemployed);
+        const paths4US = convertUnemploymentDataToPaths(data4US, data4States.maxPctUnemployed);
         savePathsData4US(paths4US)
 
     } catch(err){

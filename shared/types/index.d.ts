@@ -1,7 +1,12 @@
 export type BasicFeature = {
     attributes?: {
         fips: string;
-        name: string;
+        name?: string;
+        population?: number;
+        workforce?: number;
+        unemployed?: number;
+        unemploymentRate?: number;
+        rank?: number;
         // currentMonth: string;
     };
     geometry?: {
@@ -33,4 +38,19 @@ export type MonthlyUmempolymentDataPaths = {
         PctUnemployed: PathFrame;
         PctUnemployedDeviation?: PathFrame;
     }
+}
+
+export type UnempolymentData = BasicFeature & {
+    PctUnemployed: number[];
+    PctUnemployedDeviation?: number[];
+}
+
+export type MonthlyUmempolymentData = {
+    data: UnempolymentData[];
+    maxPctUnemployed: number;
+    maxPctUnemployedDeviation?: number;
+}
+
+export type UnempolymentDataByFIPS = {
+    [fips:string]: UnempolymentData
 }

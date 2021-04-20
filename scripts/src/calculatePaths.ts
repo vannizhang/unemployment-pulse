@@ -1,4 +1,4 @@
-import { MonthlyUmempolymentData } from "./donwload-data";
+import { MonthlyUmempolymentData } from "../../shared/types";
 
 import {
     PathFrame,
@@ -84,6 +84,8 @@ export const convertUnemploymentDataToPaths = (
             PctUnemployedDeviation
         } = d;
 
+        const { fips } = attributes;
+
         const pathPctUnemployed = calculatePath({
             values: PctUnemployed,
             ymax: maxPctUnemployed
@@ -91,7 +93,9 @@ export const convertUnemploymentDataToPaths = (
         framePctUnemployed = framePctUnemployed || pathPctUnemployed.frame;
 
         let feature:FeatureWithPathData = {
-            attributes,
+            attributes:{
+                fips
+            },
             geometry,
             PctUnemployed: {
                 path: pathPctUnemployed.path

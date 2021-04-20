@@ -2,9 +2,11 @@ import React, { useContext, useState } from 'react';
 
 import { MapView } from '../ArcGIS';
 
-import { SparklineLayer, SparklineLayerSwitcher } from '../';
+import { SparklineLayer, SparklineLayerSwitcher, QueryTaskLayer } from '../';
 
 import {
+    URL_US_COUNTIES_GENERALIZED,
+    URL_US_STATES_GENERALIZED,
     VISIBLE_SCALE_COUNTIES,
     VISIBLE_SCALE_STATES,
     WEB_MAP_ID,
@@ -44,6 +46,32 @@ const AppLayout = () => {
                     visibleScale={VISIBLE_SCALE_COUNTIES}
                     color={THEME_COLOR_ORANGE_4_JSAPI}
                     referenceLineColor={THEME_COLOR_BLUE_4_JSAPI}
+                />
+
+                <QueryTaskLayer
+                    key="query-4-US-Counties"
+                    url={URL_US_COUNTIES_GENERALIZED}
+                    outFields={['FIPS']}
+                    visibleScale={VISIBLE_SCALE_COUNTIES}
+                    onSelect={(feature) => {
+                        console.log(feature);
+                        // const FIPS = feature
+                        //     ? feature.attributes['FIPS']
+                        //     : undefined;
+                    }}
+                />
+
+                <QueryTaskLayer
+                    key="query-4-US-States"
+                    url={URL_US_STATES_GENERALIZED}
+                    outFields={['STATE_FIPS']}
+                    visibleScale={VISIBLE_SCALE_STATES}
+                    onSelect={(feature) => {
+                        console.log(feature);
+                        // const FIPS = feature
+                        //     ? feature.attributes['STATE_FIPS']
+                        //     : undefined;
+                    }}
                 />
             </MapView>
 

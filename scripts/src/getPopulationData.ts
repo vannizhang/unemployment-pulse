@@ -3,6 +3,9 @@ require('isomorphic-form-data');
 const fetch = require('node-fetch');
 import { IQueryFeaturesResponse, queryFeatures } from '@esri/arcgis-rest-feature-layer';
 import { setDefaultRequestOptions } from '@esri/arcgis-rest-request';
+import {
+    getStateAbbrev
+} from './getStateAbbrev';
 
 // use node-fetch for each request instead of relying on a global
 setDefaultRequestOptions({ fetch })
@@ -20,13 +23,12 @@ const ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL = 'https://services.arcgis.com/P3
 
 export const downloadACSData = async()=>{
 
-    const outFields = ['GEOID','NAME','B01001_001E','State'];
-    const outFields4States = outFields.filter(field=>field !== 'State');
+    const outFields = ['GEOID','NAME','B01001_001E'];
 
     const queryResponse4States = await queryFeatures({
         url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/0`,
         where: '1=1',
-        outFields: outFields4States,
+        outFields,
         returnGeometry: false,
         f: 'json'
     }) as IQueryFeaturesResponse
@@ -81,12 +83,15 @@ export const downloadACSData = async()=>{
             const {
                 GEOID,
                 NAME,
-                State,
                 B01001_001E
             } = feature.attributes;
+
+            // remove the word "county" from end of the county name 
+            const countyName = NAME.split(' ').slice(0, -1).join(' ');
+            const stateName = getStateAbbrev(GEOID.slice(0,2))
     
             populationLookup[GEOID] = {
-                name: NAME + ', ' + State,
+                name: countyName + ', ' + stateName,
                 population: B01001_001E
             }
         }

@@ -1,18 +1,23 @@
 import React, { useState, createContext } from 'react';
 import axios from 'axios';
 
-import { MonthlyUmempolymentDataPaths } from '../../shared/types';
+import {
+    MonthlyUmempolymentDataPaths,
+    UnempolymentDataByFIPS,
+} from '../../shared/types';
 
 import {
     UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME,
     UNEMPLOYMENT_PATHS_STATES_FILE_NAME,
     UNEMPLOYMENT_PATHS_US_FILE_NAME,
+    UNEMPLOYMENT_DATA_FILE_NAME,
 } from '../../shared/constants';
 
 export type AppContextValue = {
     unemploymentDataPathsUS: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
-    unemploymentDataPathsCounties?: MonthlyUmempolymentDataPaths;
+    unemploymentDataPathsCounties: MonthlyUmempolymentDataPaths;
+    unemploymentDataByFIPS: UnempolymentDataByFIPS;
 };
 
 type AppContextProviderProps = {
@@ -21,6 +26,21 @@ type AppContextProviderProps = {
 
 export const AppContext = createContext<AppContextValue>(null);
 
+const fetchDataFromPublicFolder = async <T extends unknown>(
+    filename: string
+): Promise<T> => {
+    const PUBLIC_PATH = './public';
+
+    try {
+        const { data } = await axios.get<T>(`${PUBLIC_PATH}/${filename}`);
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+
+    return null;
+};
+
 const AppContextProvider: React.FC<AppContextProviderProps> = ({
     children,
 }: AppContextProviderProps) => {
@@ -28,24 +48,27 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
 
     const loadAppData = async () => {
         try {
-            const resUmempolymentDataPaths4States = await axios.get<
+            const unemploymentDataPathsStates = await fetchDataFromPublicFolder<
                 MonthlyUmempolymentDataPaths
-            >(`./public/${UNEMPLOYMENT_PATHS_STATES_FILE_NAME}`);
+            >(UNEMPLOYMENT_PATHS_STATES_FILE_NAME);
 
-            const resUmempolymentDataPaths4Counties = await axios.get<
+            const unemploymentDataPathsCounties = await fetchDataFromPublicFolder<
                 MonthlyUmempolymentDataPaths
-            >(`./public/${UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME}`);
+            >(UNEMPLOYMENT_PATHS_COUNTIES_FILE_NAME);
 
-            const resUmempolymentDataPaths4US = await axios.get<
+            const unemploymentDataPathsUS = await fetchDataFromPublicFolder<
                 MonthlyUmempolymentDataPaths
-            >(`./public/${UNEMPLOYMENT_PATHS_US_FILE_NAME}`);
+            >(UNEMPLOYMENT_PATHS_US_FILE_NAME);
+
+            const unemploymentDataByFIPS = await fetchDataFromPublicFolder<
+                UnempolymentDataByFIPS
+            >(UNEMPLOYMENT_DATA_FILE_NAME);
 
             setValue({
-                unemploymentDataPathsStates:
-                    resUmempolymentDataPaths4States.data,
-                unemploymentDataPathsCounties:
-                    resUmempolymentDataPaths4Counties.data,
-                unemploymentDataPathsUS: resUmempolymentDataPaths4US.data,
+                unemploymentDataPathsStates,
+                unemploymentDataPathsCounties,
+                unemploymentDataPathsUS,
+                unemploymentDataByFIPS,
             });
         } catch (err) {
             console.error(err);

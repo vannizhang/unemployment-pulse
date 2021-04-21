@@ -2,7 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 
 import { MapView } from '../ArcGIS';
 
-import { SparklineLayer, SparklineLayerSwitcher, QueryTaskLayer } from '../';
+import {
+    SparklineLayer,
+    SparklineLayerSwitcher,
+    QueryTaskLayer,
+    InfoPanel,
+} from '../';
 
 import {
     URL_US_COUNTIES_GENERALIZED,
@@ -14,8 +19,8 @@ import {
 
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 import {
-    THEME_COLOR_BLUE_4_JSAPI,
-    THEME_COLOR_ORANGE_4_JSAPI,
+    SPARKLINE_COLOR_BLUE,
+    SPARKLINE_COLOR_ORANGE,
 } from '../../constants/style';
 import { UnempolymentData } from '../../../shared/types';
 
@@ -47,8 +52,8 @@ const AppLayout = () => {
                     nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsStates}
                     visibleScale={VISIBLE_SCALE_STATES}
-                    color={THEME_COLOR_ORANGE_4_JSAPI}
-                    referenceLineColor={THEME_COLOR_BLUE_4_JSAPI}
+                    color={SPARKLINE_COLOR_ORANGE}
+                    referenceLineColor={SPARKLINE_COLOR_BLUE}
                 />
 
                 <SparklineLayer
@@ -56,8 +61,8 @@ const AppLayout = () => {
                     nationalLevelData={unemploymentDataPathsUS}
                     data={unemploymentDataPathsCounties}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
-                    color={THEME_COLOR_ORANGE_4_JSAPI}
-                    referenceLineColor={THEME_COLOR_BLUE_4_JSAPI}
+                    color={SPARKLINE_COLOR_ORANGE}
+                    referenceLineColor={SPARKLINE_COLOR_BLUE}
                 />
 
                 <QueryTaskLayer
@@ -99,6 +104,8 @@ const AppLayout = () => {
                 showDeviation={showDeviation}
                 onChange={setShowDeviation.bind(this, !showDeviation)}
             />
+
+            <InfoPanel data={unemploymentData4SelectedFeature} />
         </>
     );
 };

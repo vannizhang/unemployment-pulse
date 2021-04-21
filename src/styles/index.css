@@ -1,1 +1,9 @@
 @import '~calcite-web/dist/css/calcite-web.min.css';
+
+.text-theme-color-blue {
+    color: #156AA4
+}
+
+.text-theme-color-orange {
+    color: #FF8000
+}

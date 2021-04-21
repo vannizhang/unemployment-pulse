@@ -1,5 +1,7 @@
-export const THEME_COLOR_ORANGE = '#FF8000'; // 255, 128, 0
-export const THEME_COLOR_ORANGE_4_JSAPI = [255, 128, 0, 255];
+export const THEME_COLOR_ORANGE = '#FF8000';
+export const THEME_COLOR_BLUE = '#156AA4';
 
-export const THEME_COLOR_BLUE = '#156AA4'; // 21 106 164
-export const THEME_COLOR_BLUE_4_JSAPI = [21, 106, 164, 255];
+export const SPARKLINE_COLOR_ORANGE = [255, 155, 10, 255]; //'#ff9b0a'
+export const SPARKLINE_COLOR_BLUE = [51, 146, 214, 255]; // '#3392d6'
+
+export const BORDER_COLOR = 'rgba(21,70,164,.5)';

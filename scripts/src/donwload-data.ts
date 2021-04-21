@@ -11,7 +11,7 @@ import {
 } from '../../shared/types';
 
 import {
-    getPopulationLookup
+    populationLookup
 } from './getPopulationData'
 
 type MonthlyUnemploymentFeature = {
@@ -50,8 +50,6 @@ type MonthlyUnemploymentFeature = {
 type QueryResult = {
     features: MonthlyUnemploymentFeature[]
 }
-
-const populationLookup = getPopulationLookup();
 
 const outFields = 'fips, PctUnemployed_CurrentMonth, PctUnemployed_01Month, PctUnemployed_02Month, PctUnemployed_03Month, PctUnemployed_04Month, PctUnemployed_05Month, PctUnemployed_06Month, PctUnemployed_07Month, PctUnemployed_08Month, PctUnemployed_09Month, PctUnemployed_10Month, PctUnemployed_11Month, PctUnemployed_12Month, PctUnemployed_13Month, CurrentMonth, P13Month, LaborForce_CurrentMonth, Unemployed_CurrentMonth';
 

@@ -42,6 +42,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@esri/arcgis-rest-types": "^3.0.5",
     "@types/arcgis-js-api": "^4.17.0",
     "@types/classnames": "^2.2.10",
     "@types/jest": "^26.0.15",
@@ -66,9 +67,11 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.3.0",
+    "isomorphic-form-data": "^2.0.0",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.1",
     "mini-css-extract-plugin": "^0.9.0",
+    "node-fetch": "^2.6.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "prettier": "^2.1.2",
     "resolve-url-loader": "^3.1.2",
@@ -83,6 +86,8 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@esri/arcgis-rest-feature-layer": "^3.0.5",
+    "@esri/arcgis-rest-request": "^3.0.0",
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.19.2",
     "calcite-web": "github:Esri/calcite-web#v1.2.5",

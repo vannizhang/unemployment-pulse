@@ -19,9 +19,16 @@ import {
     saveUnemploymentData
 } from './saveUnempolymentData2JSON'
 
+import {
+    downloadACSData
+} from './getPopulationData'
+
 const start = async()=>{
 
     try {
+        // download total population data for each state and county
+        await downloadACSData();
+
         const data4US = await fecthData4States(true);
 
         // fetch data from ArcGIS Online Hosted feature service

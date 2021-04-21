@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import { MapView } from '../ArcGIS';
 
@@ -17,15 +17,27 @@ import {
     THEME_COLOR_BLUE_4_JSAPI,
     THEME_COLOR_ORANGE_4_JSAPI,
 } from '../../constants/style';
+import { UnempolymentData } from '../../../shared/types';
 
 const AppLayout = () => {
     const {
         unemploymentDataPathsStates,
         unemploymentDataPathsCounties,
         unemploymentDataPathsUS,
+        unemploymentDataByFIPS,
     } = useContext<AppContextValue>(AppContext);
 
+    // unemployment for selected county or state
+    const [
+        unemploymentData4SelectedFeature,
+        setUnemploymentData4SelectedFeature,
+    ] = useState<UnempolymentData>();
+
     const [showDeviation, setShowDeviation] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log(unemploymentData4SelectedFeature);
+    }, [unemploymentData4SelectedFeature]);
 
     return (
         <>
@@ -54,10 +66,14 @@ const AppLayout = () => {
                     outFields={['FIPS']}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
                     onSelect={(feature) => {
-                        console.log(feature);
-                        // const FIPS = feature
-                        //     ? feature.attributes['FIPS']
-                        //     : undefined;
+                        // console.log(feature);
+                        const FIPS = feature
+                            ? feature.attributes['FIPS']
+                            : undefined;
+
+                        setUnemploymentData4SelectedFeature(
+                            unemploymentDataByFIPS[FIPS]
+                        );
                     }}
                 />
 
@@ -67,10 +83,14 @@ const AppLayout = () => {
                     outFields={['STATE_FIPS']}
                     visibleScale={VISIBLE_SCALE_STATES}
                     onSelect={(feature) => {
-                        console.log(feature);
-                        // const FIPS = feature
-                        //     ? feature.attributes['STATE_FIPS']
-                        //     : undefined;
+                        // console.log(feature);
+                        const FIPS = feature
+                            ? feature.attributes['STATE_FIPS']
+                            : undefined;
+
+                        setUnemploymentData4SelectedFeature(
+                            unemploymentDataByFIPS[FIPS]
+                        );
                     }}
                 />
             </MapView>

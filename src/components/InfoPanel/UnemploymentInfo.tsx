@@ -27,9 +27,9 @@ const unemploymentCategory = (rate: number): React.ReactNode => {
     if (rate < 4) {
         return (
             <>
-                <ThemeText>indicative of an</ThemeText>
+                <ThemeText customLineHeight="1">indicative of an</ThemeText>
                 <br />
-                <ThemeText>Economic Boom</ThemeText>
+                <ThemeText customLineHeight="1">Economic Boom</ThemeText>
             </>
         );
     }
@@ -37,18 +37,18 @@ const unemploymentCategory = (rate: number): React.ReactNode => {
     if (rate < 6) {
         return (
             <>
-                <ThemeText>Healthy Levels</ThemeText>
+                <ThemeText customLineHeight="1">Healthy Levels</ThemeText>
                 <br />
-                <ThemeText>of Employment</ThemeText>
+                <ThemeText customLineHeight="1">of Employment</ThemeText>
             </>
         );
     }
 
     return (
         <>
-            <ThemeText>Recession Level</ThemeText>
+            <ThemeText customLineHeight="1">Recession Level</ThemeText>
             <br />
-            <ThemeText>Unemployment</ThemeText>
+            <ThemeText customLineHeight="1">Unemployment</ThemeText>
         </>
     );
 };
@@ -112,17 +112,28 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                         maxWidth: 170,
                     }}
                 >
-                    <div className="trailer-quarter">
+                    <div
+                        style={{
+                            lineHeight: '1.2',
+                            marginBottom: '.75rem',
+                        }}
+                    >
                         {unemploymentCategory(data.attributes.unemploymentRate)}
                     </div>
 
-                    <div>
-                        <ThemeText>
+                    <div
+                        style={{
+                            lineHeight: '1.2',
+                        }}
+                    >
+                        <ThemeText customLineHeight="1">
                             Rank #
                             {numberFns.numberWithCommas(data.attributes.rank)}
                         </ThemeText>
                         <br />
-                        <ThemeText>of 3,141 US Counties</ThemeText>
+                        <ThemeText customLineHeight="1">
+                            of 3,141 US Counties
+                        </ThemeText>
                     </div>
                 </div>
             </FlexContainer>

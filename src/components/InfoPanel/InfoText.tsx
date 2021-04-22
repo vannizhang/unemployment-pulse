@@ -34,6 +34,7 @@ type TextProp = {
     color?: TextColor;
     size?: TextSize;
     customFontSize?: string;
+    customLineHeight?: string;
     children: React.ReactNode;
 };
 
@@ -41,6 +42,7 @@ export const ThemeText: React.FC<TextProp> = ({
     color = 'blue',
     size = 'default',
     customFontSize,
+    customLineHeight,
     children,
 }: TextProp) => {
     const fontSize = !customFontSize ? FontSizeLookup[size] : '';
@@ -50,11 +52,13 @@ export const ThemeText: React.FC<TextProp> = ({
         'text-theme-color-blue': color === 'blue',
     });
 
-    const style: React.CSSProperties = customFontSize
-        ? {
-              fontSize: customFontSize,
-          }
-        : null;
+    const style: React.CSSProperties =
+        customFontSize || customLineHeight
+            ? {
+                  fontSize: customFontSize || 'default',
+                  lineHeight: customLineHeight || 'default',
+              }
+            : null;
 
     return (
         <span className={classNames} style={style}>
@@ -65,12 +69,12 @@ export const ThemeText: React.FC<TextProp> = ({
 
 const InfoText: React.FC<Props> = ({ value, title }: Props) => {
     return (
-        <div>
+        <div className="trailer-quarter">
             <div>
                 <ThemeText color="blue">{title}</ThemeText>
             </div>
             <div>
-                <ThemeText color="orange" size="large">
+                <ThemeText color="orange" size="large" customLineHeight="1">
                     {value}
                 </ThemeText>
             </div>

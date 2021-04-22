@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { UnempolymentData } from '../../../shared/types';
 import InfoText, { ThemeText } from './InfoText';
@@ -23,7 +23,68 @@ type Props = {
     // layout: InfoPanelLayout
 };
 
+const unemploymentCategory = (rate: number): React.ReactNode => {
+    if (rate < 4) {
+        return (
+            <>
+                <ThemeText>indicative of an</ThemeText>
+                <br />
+                <ThemeText>Economic Boom</ThemeText>
+            </>
+        );
+    }
+
+    if (rate < 6) {
+        return (
+            <>
+                <ThemeText>Healthy Levels</ThemeText>
+                <br />
+                <ThemeText>of Employment</ThemeText>
+            </>
+        );
+    }
+
+    return (
+        <>
+            <ThemeText>Recession Level</ThemeText>
+            <br />
+            <ThemeText>Unemployment</ThemeText>
+        </>
+    );
+};
+
+const getStatistics = (data: UnempolymentData) => {
+    const { PctUnemployed } = data;
+
+    let index4Low = 0;
+    let idx4high = 0;
+
+    for (let i = 0; i < PctUnemployed.length; i++) {
+        if (PctUnemployed[i] > PctUnemployed[idx4high]) {
+            idx4high = i;
+        }
+
+        if (PctUnemployed[i] < PctUnemployed[index4Low]) {
+            index4Low = i;
+        }
+    }
+
+    const lastMonth = PctUnemployed[PctUnemployed.length - 2];
+
+    const lastYear = PctUnemployed[PctUnemployed.length - 13];
+
+    const highest = PctUnemployed[idx4high];
+
+    const lowest = PctUnemployed[index4Low];
+
+    return [lastMonth, lastYear, highest, lowest];
+};
+
 const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
+    const [lastMonth, lastYear, highest, lowest] = useMemo(() => {
+        return getStatistics(data);
+    }, [data]);
+
     return (
         <div>
             <div>
@@ -48,7 +109,7 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                     }}
                 >
                     <div className="trailer-quarter">
-                        <ThemeText>Recession Level Unemployment</ThemeText>
+                        {unemploymentCategory(data.attributes.unemploymentRate)}
                     </div>
 
                     <div>
@@ -64,18 +125,21 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
 
             <FlexContainer>
                 <InfoTextWrap>
-                    <InfoText title="Last Month" value="14.1" />
+                    <InfoText title="Last Month" value={lastMonth.toString()} />
                 </InfoTextWrap>
 
                 <InfoTextWrap>
-                    <InfoText title="Last Year" value="22.1" />
+                    <InfoText title="Last Year" value={lastYear.toString()} />
                 </InfoTextWrap>
 
                 <InfoTextWrap>
-                    <InfoText title="14 Month HIGH" value="24.2" />
+                    <InfoText
+                        title="14 Month HIGH"
+                        value={highest.toString()}
+                    />
                 </InfoTextWrap>
 
-                <InfoText title="14 Month LOW" value="9.6" />
+                <InfoText title="14 Month LOW" value={lowest.toString()} />
             </FlexContainer>
         </div>
     );

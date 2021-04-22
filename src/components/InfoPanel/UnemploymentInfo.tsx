@@ -102,9 +102,21 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                         marginRight: '2rem',
                     }}
                 >
-                    <ThemeText color="orange" customFontSize="7rem">
-                        {data.attributes.unemploymentRate}%
-                    </ThemeText>
+                    <div
+                        style={{
+                            display: 'flex',
+                        }}
+                    >
+                        <ThemeText color="orange" customFontSize="7rem">
+                            {data.attributes.unemploymentRate}
+                        </ThemeText>
+
+                        <span className="leader-half">
+                            <ThemeText color="orange" customFontSize="4rem">
+                                %
+                            </ThemeText>
+                        </span>
+                    </div>
                 </div>
 
                 <div

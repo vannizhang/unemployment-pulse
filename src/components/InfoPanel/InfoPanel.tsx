@@ -5,6 +5,7 @@ import { UnempolymentData } from '../../../shared/types';
 
 import SummaryInfo from './SummaryInfo';
 import UnemploymentInfo from './UnemploymentInfo';
+import Chart from './Chart';
 
 import { PANEL_BACKGROUND } from '../../constants/style';
 
@@ -30,6 +31,7 @@ const InfoPanel: React.FC<Props> = ({ data }: Props) => {
         <InfoPanelContainer>
             <SummaryInfo data={data} />
             <UnemploymentInfo data={data} />
+            <Chart data={data} />
         </InfoPanelContainer>
     ) : null;
 };

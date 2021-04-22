@@ -86,7 +86,11 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
     }, [data]);
 
     return (
-        <div>
+        <div
+            style={{
+                marginRight: '4rem',
+            }}
+        >
             <div>
                 <ThemeText>Unemployment Rate</ThemeText>
             </div>

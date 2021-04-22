@@ -5,6 +5,7 @@ import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 import { BarLineCombined } from '../QuickD3Chart';
 
 import { QuickD3ChartData, QuickD3ChartDataItem } from '../QuickD3Chart/types';
+import { ThemeText } from './InfoText';
 
 type Props = {
     data: UnempolymentData;
@@ -38,9 +39,22 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
     return (
         <div
             style={{
+                position: 'relative',
                 flexGrow: 1,
             }}
         >
+            <div
+                className="text-right"
+                style={{
+                    position: 'absolute',
+                    top: '.25rem',
+                    right: '.25rem',
+                }}
+            >
+                <ThemeText color="orange">Local Unemployment</ThemeText>
+                <br />
+                <ThemeText color="blue">National Unemployment</ThemeText>
+            </div>
             <BarLineCombined data4Bars={data4Bars} data4Line={data4Line} />
         </div>
     );

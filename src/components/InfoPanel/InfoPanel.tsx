@@ -29,7 +29,7 @@ const InfoPanel: React.FC<Props> = ({ data }: Props) => {
     return data ? (
         <InfoPanelContainer>
             <SummaryInfo data={data} />
-            <UnemploymentInfo />
+            <UnemploymentInfo data={data} />
         </InfoPanelContainer>
     ) : null;
 };

@@ -11,7 +11,9 @@ type Props = {
     // layout: InfoPanelLayout
 };
 
-const SummaryInfoContainer = styled.div``;
+const SummaryInfoContainer = styled.div`
+    margin-right: 2rem;
+`;
 
 const SummaryInfo: React.FC<Props> = ({ data }: Props) => {
     const participationRate = useMemo(() => {

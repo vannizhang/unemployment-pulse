@@ -13,18 +13,6 @@ import IPoint from 'esri/geometry/Point';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import IwatchUtils from 'esri/core/watchUtils';
 
-import { urlFns } from 'helper-toolkit-ts';
-
-const queryParams = urlFns.parseQuery();
-
-const TEMP_COLOR_1: number[] = queryParams.color1
-    ? [...queryParams.color1.split(',').map((d: string) => +d), 255]
-    : null;
-const TEMP_COLOR_2: number[] = queryParams.color2
-    ? [...queryParams.color2.split(',').map((d: string) => +d), 255]
-    : null;
-console.log(TEMP_COLOR_1, TEMP_COLOR_2);
-
 type Props = {
     data: MonthlyUmempolymentDataPaths;
     // will be used to render national trend
@@ -85,14 +73,6 @@ const SparklineLayer: React.FC<Props> = ({
     };
 
     const draw = async () => {
-        if (TEMP_COLOR_1) {
-            color = TEMP_COLOR_1;
-        }
-
-        if (TEMP_COLOR_2) {
-            referenceLineColor = TEMP_COLOR_2;
-        }
-
         const layer = layerRef.current;
 
         type Modules = [typeof ICIMSymbol, typeof IGraphic, typeof IPoint];

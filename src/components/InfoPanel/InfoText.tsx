@@ -33,22 +33,34 @@ const FontSizeLookup: Record<TextSize, FontSizeClass> = {
 type TextProp = {
     color?: TextColor;
     size?: TextSize;
+    customFontSize?: string;
     children: React.ReactNode;
 };
 
 export const ThemeText: React.FC<TextProp> = ({
     color = 'blue',
     size = 'default',
+    customFontSize,
     children,
 }: TextProp) => {
-    const fontSize = FontSizeLookup[size];
+    const fontSize = !customFontSize ? FontSizeLookup[size] : '';
 
     const classNames = classnames(`avenir-bold ${fontSize}`, {
         'text-theme-color-orange': color === 'orange',
         'text-theme-color-blue': color === 'blue',
     });
 
-    return <span className={classNames}>{children}</span>;
+    const style: React.CSSProperties = customFontSize
+        ? {
+              fontSize: customFontSize,
+          }
+        : null;
+
+    return (
+        <span className={classNames} style={style}>
+            {children}
+        </span>
+    );
 };
 
 const InfoText: React.FC<Props> = ({ value, title }: Props) => {

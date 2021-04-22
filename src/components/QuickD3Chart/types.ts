@@ -1,6 +1,7 @@
 export type QuickD3ChartDataItem = {
     key: string | number;
     value: number;
+    label?: string;
 };
 
 export type QuickD3ChartData = QuickD3ChartDataItem[];

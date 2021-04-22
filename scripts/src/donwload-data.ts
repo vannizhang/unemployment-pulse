@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const SERVICE_URL = 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/BLS_Monthly_Unemployment_Current_14_Months/FeatureServer';
+export const UNEMPLOYMENT_SERVICE_URL = 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/BLS_Monthly_Unemployment_Current_14_Months/FeatureServer';
 const LAYER_ID_US = '0';
 const LAYER_ID_STATE = '1';
 const LAYER_ID_COUNTIES = '2';
@@ -71,7 +71,7 @@ export const fecthData4States = async(shouldFetchNationalAverage=false):Promise<
     const layerId = shouldFetchNationalAverage ? LAYER_ID_US : LAYER_ID_STATE;
 
     try{
-        const { data } = await axios.get<QueryResult>(`${SERVICE_URL}/${layerId}/query`, { params: queryParams });
+        const { data } = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${layerId}/query`, { params: queryParams });
         return processQueryResult(data.features);
     } catch(err){
         console.error(err)
@@ -83,9 +83,9 @@ export const fecthData4States = async(shouldFetchNationalAverage=false):Promise<
 export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
     try {
 
-        const response4Counties1 = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
+        const response4Counties1 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
 
-        const response4Counties2 = await axios.get<QueryResult>(`${SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
+        const response4Counties2 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
 
         const features = [
             ...response4Counties1.data.features,

@@ -10,31 +10,29 @@ type Props = {
     data: UnempolymentData;
 };
 
+const getChartData = (values: number[], months: string[]) => {
+    return values.map((value, index) => {
+        return {
+            key: index,
+            value,
+        };
+    });
+};
+
 const Chart: React.FC<Props> = ({ data }: Props) => {
-    const { unemploymentDataByFIPS } = useContext<AppContextValue>(AppContext);
+    const { unemploymentDataByFIPS, months } = useContext<AppContextValue>(
+        AppContext
+    );
 
     const data4Line: QuickD3ChartData = useMemo(() => {
         const USData = unemploymentDataByFIPS['0'];
-
         const { PctUnemployed } = USData;
-
-        return PctUnemployed.map((value, index) => {
-            return {
-                key: index,
-                value,
-            };
-        });
+        return getChartData(PctUnemployed, months);
     }, [unemploymentDataByFIPS]);
 
     const data4Bars: QuickD3ChartData = useMemo(() => {
         const { PctUnemployed } = data;
-
-        return PctUnemployed.map((value, index) => {
-            return {
-                key: index,
-                value,
-            };
-        });
+        return getChartData(PctUnemployed, months);
     }, [data]);
 
     return (

@@ -12,12 +12,14 @@ import {
     UNEMPLOYMENT_PATHS_US_FILE_NAME,
     UNEMPLOYMENT_DATA_FILE_NAME,
 } from '../../shared/constants';
+import { queryMonths } from '../services/monthly-unemployment-data';
 
 export type AppContextValue = {
     unemploymentDataPathsUS: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsCounties: MonthlyUmempolymentDataPaths;
     unemploymentDataByFIPS: UnempolymentDataByFIPS;
+    months: string[];
 };
 
 type AppContextProviderProps = {
@@ -64,11 +66,14 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 UnempolymentDataByFIPS
             >(UNEMPLOYMENT_DATA_FILE_NAME);
 
+            const months = await queryMonths();
+
             setValue({
                 unemploymentDataPathsStates,
                 unemploymentDataPathsCounties,
                 unemploymentDataPathsUS,
                 unemploymentDataByFIPS,
+                months,
             });
         } catch (err) {
             console.error(err);

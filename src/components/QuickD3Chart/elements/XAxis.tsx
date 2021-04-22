@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { select, axisBottom, timeFormat, AxisScale } from 'd3';
 
 import { SvgContainerData } from '../types';
 
 import { AXIS_TEXT_COLOR, AXIS_LINE_COLOR } from '../constants';
+import {
+    AppContextValue,
+    AppContext,
+} from '../../../contexts/AppContextProvider';
 
 type Props = {
     scale: AxisScale<string | number>;
@@ -20,6 +24,8 @@ const YAxis: React.FC<Props> = ({
     timeFormatSpecifier,
 }: Props) => {
     // const containerGroup = useRef<SVGGElement>();
+
+    const { months } = useContext<AppContextValue>(AppContext);
 
     const formatTime = timeFormatSpecifier
         ? timeFormat(timeFormatSpecifier)
@@ -44,6 +50,16 @@ const YAxis: React.FC<Props> = ({
                 return formatTime(date);
             });
         }
+
+        xAxisGenerator.tickFormat((d) => {
+            const [month, year] = months[d].split(' ');
+            const abbreviation = month.slice(0, 3);
+            const formated =
+                abbreviation === 'Jan'
+                    ? `${abbreviation} ${year}`
+                    : abbreviation;
+            return formated;
+        });
 
         const xAxisLabel = select(rootGroup).selectAll('.x.axis');
 

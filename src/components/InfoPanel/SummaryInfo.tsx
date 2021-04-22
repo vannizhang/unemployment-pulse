@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 
 import styled from 'styled-components';
 import { UnempolymentData } from '../../../shared/types';
-import InfoText from './InfoText';
+import InfoText, { ThemeText } from './InfoText';
 import { numberFns } from 'helper-toolkit-ts';
-import { BORDER_COLOR } from '../../constants/style';
+import { SEPARATOR_COLOR } from '../../constants/style';
 
 type Props = {
     data: UnempolymentData;
@@ -26,18 +26,16 @@ const SummaryInfo: React.FC<Props> = ({ data }: Props) => {
         <SummaryInfoContainer>
             <div className="trailer-half">
                 <div>
-                    <span className="avenir-bold font-size-3 text-theme-color-orange">
+                    <ThemeText color="orange" size="large">
                         {data.attributes.name}
-                    </span>
+                    </ThemeText>
                 </div>
 
                 <div className="avenir-bold font-size-0">
-                    <span className="text-theme-color-orange">
+                    <ThemeText color="orange">
                         {numberFns.numberWithCommas(data.attributes.population)}
-                    </span>{' '}
-                    <span className="text-theme-color-blue">
-                        Total population
-                    </span>
+                    </ThemeText>{' '}
+                    <ThemeText>Total population</ThemeText>
                 </div>
             </div>
 
@@ -49,7 +47,7 @@ const SummaryInfo: React.FC<Props> = ({ data }: Props) => {
                 <div
                     className="padding-right-1"
                     style={{
-                        borderRight: `1px solid ${BORDER_COLOR}`,
+                        borderRight: `1px solid ${SEPARATOR_COLOR}`,
                     }}
                 >
                     <InfoText

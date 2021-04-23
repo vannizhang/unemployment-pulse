@@ -7,7 +7,11 @@ import SummaryInfo from './SummaryInfo';
 import UnemploymentInfo from './UnemploymentInfo';
 import Chart from './Chart';
 
-import { PANEL_BACKGROUND } from '../../constants/style';
+import {
+    PANEL_BACKGROUND,
+    THEME_COLOR_BLUE,
+    THEME_COLOR_ORANGE,
+} from '../../constants/style';
 
 const InfoPanelContainer = styled.div`
     position: absolute;
@@ -22,17 +26,36 @@ const InfoPanelContainer = styled.div`
     box-shadow: 0 0 10px 2px #156aa4;
 `;
 
+const CloseBtnDiv = styled.div`
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+
+    svg {
+        stroke: ${THEME_COLOR_BLUE};
+        fill: ${THEME_COLOR_BLUE};
+    }
+`;
+
 type Props = {
     data: UnempolymentData;
+    close: () => void;
     // layout: InfoPanelLayout
 };
 
-const InfoPanel: React.FC<Props> = ({ data }: Props) => {
+const InfoPanel: React.FC<Props> = ({ data, close }: Props) => {
     return data ? (
         <InfoPanelContainer>
             <SummaryInfo data={data} />
             <UnemploymentInfo data={data} />
             <Chart data={data} />
+
+            <CloseBtnDiv onClick={close}>
+                <svg height="32" width="32" viewBox="0 0 32 32" className="">
+                    <path d="M23.985 8.722L16.707 16l7.278 7.278-.707.707L16 16.707l-7.278 7.278-.707-.707L15.293 16 8.015 8.722l.707-.707L16 15.293l7.278-7.278z" />
+                </svg>
+            </CloseBtnDiv>
         </InfoPanelContainer>
     ) : null;
 };

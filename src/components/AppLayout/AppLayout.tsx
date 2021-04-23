@@ -27,6 +27,13 @@ import { UnempolymentData } from '../../../shared/types';
 
 import IGraphic from 'esri/Graphic';
 
+import {
+    updateFIPSInURLHashParams,
+    getDefaultValueFromHashParams,
+} from '../../utils/URLHashParams';
+
+const defaultFIPS = getDefaultValueFromHashParams('fips') as string;
+
 const AppLayout = () => {
     const {
         unemploymentDataPathsStates,
@@ -39,15 +46,22 @@ const AppLayout = () => {
     const [
         unemploymentData4SelectedFeature,
         setUnemploymentData4SelectedFeature,
-    ] = useState<UnempolymentData>();
+    ] = useState<UnempolymentData>(unemploymentDataByFIPS[defaultFIPS]);
 
     const [showDeviation, setShowDeviation] = useState<boolean>(false);
 
     const [selectedFeature, setSelectedFeature] = useState<IGraphic>();
 
     useEffect(() => {
-        console.log(unemploymentData4SelectedFeature);
-    }, [unemploymentData4SelectedFeature]);
+        const FIPS = selectedFeature
+            ? selectedFeature.attributes['FIPS'] ||
+              selectedFeature.attributes['STATE_FIPS']
+            : undefined;
+
+        setUnemploymentData4SelectedFeature(unemploymentDataByFIPS[FIPS]);
+
+        updateFIPSInURLHashParams(FIPS);
+    }, [selectedFeature]);
 
     return (
         <>
@@ -75,18 +89,7 @@ const AppLayout = () => {
                     url={URL_US_COUNTIES_GENERALIZED}
                     outFields={['FIPS']}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
-                    onSelect={(feature) => {
-                        // console.log(feature);
-                        const FIPS = feature
-                            ? feature.attributes['FIPS']
-                            : undefined;
-
-                        setUnemploymentData4SelectedFeature(
-                            unemploymentDataByFIPS[FIPS]
-                        );
-
-                        setSelectedFeature(feature);
-                    }}
+                    onSelect={setSelectedFeature}
                 />
 
                 <QueryTaskLayer
@@ -94,18 +97,7 @@ const AppLayout = () => {
                     url={URL_US_STATES_GENERALIZED}
                     outFields={['STATE_FIPS']}
                     visibleScale={VISIBLE_SCALE_STATES}
-                    onSelect={(feature) => {
-                        // console.log(feature);
-                        const FIPS = feature
-                            ? feature.attributes['STATE_FIPS']
-                            : undefined;
-
-                        setUnemploymentData4SelectedFeature(
-                            unemploymentDataByFIPS[FIPS]
-                        );
-
-                        setSelectedFeature(feature);
-                    }}
+                    onSelect={setSelectedFeature}
                 />
 
                 <QueryResultLayer queryResult={selectedFeature} />
@@ -116,7 +108,10 @@ const AppLayout = () => {
                 onChange={setShowDeviation.bind(this, !showDeviation)}
             />
 
-            <InfoPanel data={unemploymentData4SelectedFeature} />
+            <InfoPanel
+                data={unemploymentData4SelectedFeature}
+                close={setSelectedFeature.bind(this, null)}
+            />
         </>
     );
 };

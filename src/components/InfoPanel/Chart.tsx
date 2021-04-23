@@ -48,7 +48,7 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 style={{
                     position: 'absolute',
                     top: '.25rem',
-                    right: '.25rem',
+                    right: '1rem',
                 }}
             >
                 <ThemeText color="orange">Local Unemployment</ThemeText>

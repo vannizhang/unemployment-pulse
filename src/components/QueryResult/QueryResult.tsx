@@ -30,7 +30,10 @@ const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
                 'esri/layers/GraphicsLayer',
             ]) as Promise<Modules>);
 
-            const layer = new GraphicsLayer({});
+            const layer = new GraphicsLayer({
+                opacity: 0.8,
+                effect: 'blur(3px)',
+            });
 
             mapView.map.add(layer);
 

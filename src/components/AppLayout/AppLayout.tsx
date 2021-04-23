@@ -33,6 +33,7 @@ import {
 } from '../../utils/URLHashParams';
 
 const defaultFIPS = getDefaultValueFromHashParams('fips') as string;
+// console.log(defaultFIPS)
 
 const AppLayout = () => {
     const {
@@ -53,14 +54,16 @@ const AppLayout = () => {
     const [selectedFeature, setSelectedFeature] = useState<IGraphic>();
 
     useEffect(() => {
-        const FIPS = selectedFeature
-            ? selectedFeature.attributes['FIPS'] ||
-              selectedFeature.attributes['STATE_FIPS']
-            : undefined;
+        if (selectedFeature) {
+            const FIPS = selectedFeature
+                ? selectedFeature.attributes['FIPS'] ||
+                  selectedFeature.attributes['STATE_FIPS']
+                : undefined;
 
-        setUnemploymentData4SelectedFeature(unemploymentDataByFIPS[FIPS]);
+            setUnemploymentData4SelectedFeature(unemploymentDataByFIPS[FIPS]);
 
-        updateFIPSInURLHashParams(FIPS);
+            updateFIPSInURLHashParams(FIPS);
+        }
     }, [selectedFeature]);
 
     return (
@@ -110,7 +113,11 @@ const AppLayout = () => {
 
             <InfoPanel
                 data={unemploymentData4SelectedFeature}
-                close={setSelectedFeature.bind(this, null)}
+                close={() => {
+                    setSelectedFeature(null);
+                    setUnemploymentData4SelectedFeature(null);
+                    updateFIPSInURLHashParams();
+                }}
             />
         </>
     );

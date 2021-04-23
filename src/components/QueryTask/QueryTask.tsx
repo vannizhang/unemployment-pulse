@@ -81,17 +81,25 @@ const QueryTaskLayer: React.FC<Props> = ({
         }
     };
 
-    const queryFeatures = async (event: __esri.MapViewClickEvent) => {
+    const queryFeatures = async ({
+        event,
+        where,
+    }: {
+        event?: __esri.MapViewClickEvent;
+        where?: string;
+    }) => {
         // console.log(mapView.scale)
 
         const isVisible = isLayerInVisibleRange();
 
         if (isVisible) {
-            // onStart();
+            where = where || '1=1';
+
+            const geometry = event ? mapView.toMap(event) : null;
 
             const results = await layerViewRef.current.queryFeatures({
-                where: '1=1',
-                geometry: mapView.toMap(event),
+                where,
+                geometry,
                 returnGeometry: true,
                 outFields: outFields || ['*'],
             });
@@ -106,37 +114,8 @@ const QueryTaskLayer: React.FC<Props> = ({
 
     const initEventListeners = () => {
         mapView.on('click', (event) => {
-            queryFeatures(event);
+            queryFeatures({ event });
         });
-
-        // mapView.on('pointer-leave', () => {
-        //     pointerOnMove(undefined);
-        // });
-
-        // mapView.on('pointer-move', (event) => {
-        //     clearTimeout(mouseMoveDelay.current);
-
-        //     // mapView.toScreen(event.)
-        //     // console.log(event.x, event.y)
-
-        //     if (isLayerInVisibleRange() && !isMobile) {
-        //         const { x, y } = event;
-
-        //         pointerOnMove({ x, y });
-
-        //         mouseMoveDelay.current = window.setTimeout(async () => {
-        //             const results = await layerViewRef.current.queryFeatures({
-        //                 where: '1=1',
-        //                 geometry: mapView.toMap(event),
-        //                 returnGeometry: false,
-        //                 outFields: outFields || ['*'],
-        //             });
-        //             // console.log(results)
-
-        //             featureOnHover(results.features[0]);
-        //         }, 50);
-        //     }
-        // });
     };
 
     useEffect(() => {
@@ -144,6 +123,17 @@ const QueryTaskLayer: React.FC<Props> = ({
             init();
         }
     }, [mapView]);
+
+    // useEffect(()=>{
+    //     if(layerViewRef.current && defaultFIPS){
+
+    //         const fieldName4FIPS = outFields[0]
+    //         const where = `${fieldName4FIPS}='${defaultFIPS}'`
+    //         queryFeatures({
+    //             where
+    //         })
+    //     }
+    // }, [layerViewRef.current])
 
     return null;
 };

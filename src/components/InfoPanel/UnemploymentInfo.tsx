@@ -5,8 +5,33 @@ import InfoText, { ThemeText } from './InfoText';
 
 import styled from 'styled-components';
 import { numberFns } from 'helper-toolkit-ts';
-import { SEPARATOR_COLOR } from '../../constants/style';
+import { SEPARATOR_COLOR, BREAKPOINT_SMALL } from '../../constants/style';
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+
+const UnemploymentInfoContainer = styled.div`
+    margin-right: 4rem;
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        margin-right: unset;
+        margin: 1rem 0;
+        padding: 1rem 0;
+        border-top: 1px solid ${SEPARATOR_COLOR};
+        border-bottom: 1px solid ${SEPARATOR_COLOR};
+    }
+`;
+
+const UnemploymentRateTextWrap = styled.div`
+    line-height: 1.1;
+    margin-right: 2rem;
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        margin-right: 0.75rem;
+    }
+`;
+
+const StatisticsInfoContainer = styled.div`
+    display: flex;
+`;
 
 const FlexContainer = styled.div`
     display: flex;
@@ -24,39 +49,105 @@ type Props = {
     // layout: InfoPanelLayout
 };
 
-const unemploymentCategory = (rate: number): React.ReactNode => {
-    if (rate < 4) {
-        return (
-            <>
-                <ThemeText customLineHeight="1">indicative of an</ThemeText>
-                <br />
-                <ThemeText customLineHeight="1">Economic Boom</ThemeText>
-            </>
-        );
-    }
-
-    if (rate < 6) {
-        return (
-            <>
-                <ThemeText customLineHeight="1">Healthy Levels</ThemeText>
-                <br />
-                <ThemeText customLineHeight="1">of Employment</ThemeText>
-            </>
-        );
-    }
-
-    return (
-        <>
-            <ThemeText customLineHeight="1">Recession Level</ThemeText>
-            <br />
-            <ThemeText customLineHeight="1">Unemployment</ThemeText>
-        </>
-    );
-};
-
 type STATS_DATA = {
     month: string;
     value: number;
+};
+
+const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
+    const { months } = useContext<AppContextValue>(AppContext);
+
+    const [lastMonth, lastYear, lowest, highest] = useMemo(() => {
+        return getStatistics(data, months);
+    }, [data]);
+
+    return (
+        <UnemploymentInfoContainer>
+            <div>
+                <ThemeText>Unemployment Rate</ThemeText>
+            </div>
+
+            <FlexContainer>
+                <UnemploymentRateTextWrap>
+                    <div
+                        style={{
+                            display: 'flex',
+                        }}
+                    >
+                        <ThemeText color="orange" customFontSize="7rem">
+                            {data.attributes.unemploymentRate}
+                        </ThemeText>
+
+                        <span className="leader-half">
+                            <ThemeText color="orange" customFontSize="4rem">
+                                %
+                            </ThemeText>
+                        </span>
+                    </div>
+                </UnemploymentRateTextWrap>
+
+                <div
+                    style={{
+                        maxWidth: 170,
+                    }}
+                >
+                    <div
+                        style={{
+                            lineHeight: '1.2',
+                            marginBottom: '.75rem',
+                        }}
+                    >
+                        {unemploymentCategory(data.attributes.unemploymentRate)}
+                    </div>
+
+                    <div
+                        style={{
+                            lineHeight: '1.2',
+                        }}
+                    >
+                        <ThemeText customLineHeight="1">
+                            Rank #
+                            {numberFns.numberWithCommas(data.attributes.rank)}
+                        </ThemeText>
+                        <br />
+                        <ThemeText customLineHeight="1">
+                            of 3,141 US Counties
+                        </ThemeText>
+                    </div>
+                </div>
+            </FlexContainer>
+
+            <StatisticsInfoContainer>
+                <InfoTextWrap>
+                    <InfoText
+                        title="Last Month"
+                        value={lastMonth.value.toString()}
+                    />
+                </InfoTextWrap>
+
+                <InfoTextWrap>
+                    <InfoText
+                        title="Last Year"
+                        value={lastYear.value.toString()}
+                    />
+                </InfoTextWrap>
+
+                <InfoTextWrap>
+                    <InfoText
+                        title="14 Month HIGH"
+                        subtitle={highest.month}
+                        value={highest.value.toString()}
+                    />
+                </InfoTextWrap>
+
+                <InfoText
+                    title="14 Month LOW"
+                    subtitle={lowest.month}
+                    value={lowest.value.toString()}
+                />
+            </StatisticsInfoContainer>
+        </UnemploymentInfoContainer>
+    );
 };
 
 const getStatistics = (
@@ -102,108 +193,33 @@ const getStatistics = (
     });
 };
 
-const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
-    const { months } = useContext<AppContextValue>(AppContext);
+const unemploymentCategory = (rate: number): React.ReactNode => {
+    if (rate < 4) {
+        return (
+            <>
+                <ThemeText customLineHeight="1">indicative of an</ThemeText>
+                <br />
+                <ThemeText customLineHeight="1">Economic Boom</ThemeText>
+            </>
+        );
+    }
 
-    const [lastMonth, lastYear, lowest, highest] = useMemo(() => {
-        return getStatistics(data, months);
-    }, [data]);
+    if (rate < 6) {
+        return (
+            <>
+                <ThemeText customLineHeight="1">Healthy Levels</ThemeText>
+                <br />
+                <ThemeText customLineHeight="1">of Employment</ThemeText>
+            </>
+        );
+    }
 
     return (
-        <div
-            style={{
-                marginRight: '4rem',
-            }}
-        >
-            <div>
-                <ThemeText>Unemployment Rate</ThemeText>
-            </div>
-
-            <FlexContainer>
-                <div
-                    style={{
-                        lineHeight: '1.1',
-                        marginRight: '2rem',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                        }}
-                    >
-                        <ThemeText color="orange" customFontSize="7rem">
-                            {data.attributes.unemploymentRate}
-                        </ThemeText>
-
-                        <span className="leader-half">
-                            <ThemeText color="orange" customFontSize="4rem">
-                                %
-                            </ThemeText>
-                        </span>
-                    </div>
-                </div>
-
-                <div
-                    style={{
-                        maxWidth: 170,
-                    }}
-                >
-                    <div
-                        style={{
-                            lineHeight: '1.2',
-                            marginBottom: '.75rem',
-                        }}
-                    >
-                        {unemploymentCategory(data.attributes.unemploymentRate)}
-                    </div>
-
-                    <div
-                        style={{
-                            lineHeight: '1.2',
-                        }}
-                    >
-                        <ThemeText customLineHeight="1">
-                            Rank #
-                            {numberFns.numberWithCommas(data.attributes.rank)}
-                        </ThemeText>
-                        <br />
-                        <ThemeText customLineHeight="1">
-                            of 3,141 US Counties
-                        </ThemeText>
-                    </div>
-                </div>
-            </FlexContainer>
-
-            <FlexContainer>
-                <InfoTextWrap>
-                    <InfoText
-                        title="Last Month"
-                        value={lastMonth.value.toString()}
-                    />
-                </InfoTextWrap>
-
-                <InfoTextWrap>
-                    <InfoText
-                        title="Last Year"
-                        value={lastYear.value.toString()}
-                    />
-                </InfoTextWrap>
-
-                <InfoTextWrap>
-                    <InfoText
-                        title="14 Month HIGH"
-                        subtitle={highest.month}
-                        value={highest.value.toString()}
-                    />
-                </InfoTextWrap>
-
-                <InfoText
-                    title="14 Month LOW"
-                    subtitle={lowest.month}
-                    value={lowest.value.toString()}
-                />
-            </FlexContainer>
-        </div>
+        <>
+            <ThemeText customLineHeight="1">Recession Level</ThemeText>
+            <br />
+            <ThemeText customLineHeight="1">Unemployment</ThemeText>
+        </>
     );
 };
 

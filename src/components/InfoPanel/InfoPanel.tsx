@@ -10,7 +10,7 @@ import Chart from './Chart';
 import {
     PANEL_BACKGROUND,
     THEME_COLOR_BLUE,
-    THEME_COLOR_ORANGE,
+    BREAKPOINT_SMALL,
 } from '../../constants/style';
 
 const InfoPanelContainer = styled.div`
@@ -24,6 +24,15 @@ const InfoPanelContainer = styled.div`
     background-color: ${PANEL_BACKGROUND};
     padding: 1rem 2rem;
     box-shadow: 0 0 10px 2px #156aa4;
+    z-index: 5;
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        top: 0;
+        bottom: 0;
+        height: unset;
+        flex-direction: column;
+        overflow-y: auto;
+    }
 `;
 
 const CloseBtnDiv = styled.div`

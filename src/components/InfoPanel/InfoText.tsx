@@ -7,6 +7,7 @@ import { THEME_COLOR_ORANGE, THEME_COLOR_BLUE } from '../../constants/style';
 type Props = {
     value: string;
     title: string;
+    subtitle?: string;
 };
 
 type TextColor = 'orange' | 'blue';
@@ -67,16 +68,33 @@ export const ThemeText: React.FC<TextProp> = ({
     );
 };
 
-const InfoText: React.FC<Props> = ({ value, title }: Props) => {
+const InfoText: React.FC<Props> = ({ value, title, subtitle }: Props) => {
     return (
         <div className="trailer-quarter">
             <div>
                 <ThemeText color="blue">{title}</ThemeText>
             </div>
-            <div>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                }}
+            >
                 <ThemeText color="orange" size="large" customLineHeight="1">
                     {value}
                 </ThemeText>
+
+                {subtitle ? (
+                    <div className="margin-left-quarter">
+                        <ThemeText
+                            color="orange"
+                            size="small"
+                            customLineHeight="1"
+                        >
+                            {subtitle}
+                        </ThemeText>
+                    </div>
+                ) : null}
             </div>
         </div>
     );

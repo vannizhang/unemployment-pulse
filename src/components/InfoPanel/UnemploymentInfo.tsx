@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import { UnempolymentData } from '../../../shared/types';
 import InfoText, { ThemeText } from './InfoText';
@@ -6,6 +6,7 @@ import InfoText, { ThemeText } from './InfoText';
 import styled from 'styled-components';
 import { numberFns } from 'helper-toolkit-ts';
 import { SEPARATOR_COLOR } from '../../constants/style';
+import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 const FlexContainer = styled.div`
     display: flex;
@@ -13,7 +14,7 @@ const FlexContainer = styled.div`
 
 const InfoTextWrap = styled.div`
     border-right: 1px solid ${SEPARATOR_COLOR};
-    width: 120px;
+    width: 135px;
     padding-right: 0.75rem;
     margin-right: 1rem;
 `;
@@ -53,36 +54,59 @@ const unemploymentCategory = (rate: number): React.ReactNode => {
     );
 };
 
-const getStatistics = (data: UnempolymentData) => {
+type STATS_DATA = {
+    month: string;
+    value: number;
+};
+
+const getStatistics = (
+    data: UnempolymentData,
+    months: string[]
+): STATS_DATA[] => {
     const { PctUnemployed } = data;
 
-    let index4Low = 0;
-    let idx4high = 0;
+    const idx4lastMonth = PctUnemployed.length - 2;
+    // last year this month
+    const idx4LastYear = PctUnemployed.length - 13;
+    // 14 month low
+    let index4LowesetMonth = 0;
+    // 14 month high
+    let idx4highestMonth = 0;
 
     for (let i = 0; i < PctUnemployed.length; i++) {
-        if (PctUnemployed[i] > PctUnemployed[idx4high]) {
-            idx4high = i;
+        if (PctUnemployed[i] > PctUnemployed[idx4highestMonth]) {
+            idx4highestMonth = i;
         }
 
-        if (PctUnemployed[i] < PctUnemployed[index4Low]) {
-            index4Low = i;
+        if (PctUnemployed[i] < PctUnemployed[index4LowesetMonth]) {
+            index4LowesetMonth = i;
         }
     }
 
-    const lastMonth = PctUnemployed[PctUnemployed.length - 2];
+    return [
+        idx4lastMonth,
+        idx4LastYear,
+        index4LowesetMonth,
+        idx4highestMonth,
+    ].map((idx) => {
+        const value = PctUnemployed[idx];
+        const [month, year] = months[idx].split(' ');
+        const formatedMonth = `${month.slice(0, 3).toUpperCase()} '${year.slice(
+            2
+        )}`;
 
-    const lastYear = PctUnemployed[PctUnemployed.length - 13];
-
-    const highest = PctUnemployed[idx4high];
-
-    const lowest = PctUnemployed[index4Low];
-
-    return [lastMonth, lastYear, highest, lowest];
+        return {
+            month: formatedMonth,
+            value,
+        };
+    });
 };
 
 const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
-    const [lastMonth, lastYear, highest, lowest] = useMemo(() => {
-        return getStatistics(data);
+    const { months } = useContext<AppContextValue>(AppContext);
+
+    const [lastMonth, lastYear, lowest, highest] = useMemo(() => {
+        return getStatistics(data, months);
     }, [data]);
 
     return (
@@ -152,21 +176,32 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
 
             <FlexContainer>
                 <InfoTextWrap>
-                    <InfoText title="Last Month" value={lastMonth.toString()} />
+                    <InfoText
+                        title="Last Month"
+                        value={lastMonth.value.toString()}
+                    />
                 </InfoTextWrap>
 
                 <InfoTextWrap>
-                    <InfoText title="Last Year" value={lastYear.toString()} />
+                    <InfoText
+                        title="Last Year"
+                        value={lastYear.value.toString()}
+                    />
                 </InfoTextWrap>
 
                 <InfoTextWrap>
                     <InfoText
                         title="14 Month HIGH"
-                        value={highest.toString()}
+                        subtitle={highest.month}
+                        value={highest.value.toString()}
                     />
                 </InfoTextWrap>
 
-                <InfoText title="14 Month LOW" value={lowest.toString()} />
+                <InfoText
+                    title="14 Month LOW"
+                    subtitle={lowest.month}
+                    value={lowest.value.toString()}
+                />
             </FlexContainer>
         </div>
     );

@@ -19,6 +19,7 @@ const InfoPanelContainer = styled.div`
     box-sizing: border-box;
     background-color: ${PANEL_BACKGROUND};
     padding: 1rem 2rem;
+    box-shadow: 0 0 10px 2px #156aa4;
 `;
 
 type Props = {

@@ -6,6 +6,7 @@ import {
     SparklineLayer,
     SparklineLayerSwitcher,
     QueryTaskLayer,
+    QueryResultLayer,
     InfoPanel,
 } from '../';
 
@@ -24,6 +25,8 @@ import {
 } from '../../constants/style';
 import { UnempolymentData } from '../../../shared/types';
 
+import IGraphic from 'esri/Graphic';
+
 const AppLayout = () => {
     const {
         unemploymentDataPathsStates,
@@ -39,6 +42,8 @@ const AppLayout = () => {
     ] = useState<UnempolymentData>();
 
     const [showDeviation, setShowDeviation] = useState<boolean>(false);
+
+    const [selectedFeature, setSelectedFeature] = useState<IGraphic>();
 
     useEffect(() => {
         console.log(unemploymentData4SelectedFeature);
@@ -79,6 +84,8 @@ const AppLayout = () => {
                         setUnemploymentData4SelectedFeature(
                             unemploymentDataByFIPS[FIPS]
                         );
+
+                        setSelectedFeature(feature);
                     }}
                 />
 
@@ -96,8 +103,12 @@ const AppLayout = () => {
                         setUnemploymentData4SelectedFeature(
                             unemploymentDataByFIPS[FIPS]
                         );
+
+                        setSelectedFeature(feature);
                     }}
                 />
+
+                <QueryResultLayer queryResult={selectedFeature} />
             </MapView>
 
             <SparklineLayerSwitcher

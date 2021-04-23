@@ -5,10 +5,18 @@ import IMapView from 'esri/views/MapView';
 import IWebMap from 'esri/WebMap';
 import IwatchUtils from 'esri/core/watchUtils';
 
+import {
+    updateMapLocation,
+    getDefaultValueFromHashParams,
+    MapLocation,
+} from '../../utils/URLHashParams';
+
 interface Props {
     webmapId: string;
     children?: React.ReactNode;
 }
+
+const defaultMapLocation = getDefaultValueFromHashParams('@') as MapLocation;
 
 const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
     const mapDivRef = React.useRef<HTMLDivElement>();
@@ -24,6 +32,10 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
                 'esri/WebMap',
             ]) as Promise<Modules>);
 
+            const { lat, lon, zoom } = defaultMapLocation || {};
+
+            const center = lon && lat ? [lon, lat] : undefined;
+
             const view = new MapView({
                 container: mapDivRef.current,
                 map: new WebMap({
@@ -31,6 +43,8 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
                         id: webmapId,
                     },
                 }),
+                center,
+                zoom,
             });
 
             view.when(() => {
@@ -58,19 +72,19 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
 
                 // console.log(mapView.scale)
 
-                // const centerLocation: MapCenterLocation = {
-                //     lat:
-                //         mapView.center && mapView.center.latitude
-                //             ? +mapView.center.latitude.toFixed(3)
-                //             : 0,
-                //     lon:
-                //         mapView.center && mapView.center.longitude
-                //             ? +mapView.center.longitude.toFixed(3)
-                //             : 0,
-                //     zoom: mapView.zoom,
-                // };
+                const centerLocation = {
+                    lat:
+                        mapView.center && mapView.center.latitude
+                            ? +mapView.center.latitude.toFixed(3)
+                            : 0,
+                    lon:
+                        mapView.center && mapView.center.longitude
+                            ? +mapView.center.longitude.toFixed(3)
+                            : 0,
+                    zoom: mapView.zoom,
+                };
 
-                // updateMapLocation(centerLocation);
+                updateMapLocation(centerLocation);
             });
         } catch (err) {
             console.error(err);

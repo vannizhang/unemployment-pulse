@@ -54,10 +54,7 @@ const YAxis: React.FC<Props> = ({
         xAxisGenerator.tickFormat((d) => {
             const [month, year] = months[d].split(' ');
             const abbreviation = month.slice(0, 3);
-            const formated =
-                abbreviation === 'Jan'
-                    ? `${abbreviation} ${year}`
-                    : abbreviation;
+            const formated = abbreviation === 'Jan' ? year : abbreviation;
             return formated;
         });
 

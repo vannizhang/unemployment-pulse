@@ -31,6 +31,10 @@ const UnemploymentRateTextWrap = styled.div`
 
 const StatisticsInfoContainer = styled.div`
     display: flex;
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const InfoTextWrap = styled.div`
@@ -38,6 +42,13 @@ const InfoTextWrap = styled.div`
     width: 135px;
     padding-right: 0.75rem;
     margin-right: 1rem;
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        border-right: none;
+        width: 45%;
+        padding-right: 0.25rem;
+        margin-right: 0.25rem;
+    }
 `;
 
 type Props = {

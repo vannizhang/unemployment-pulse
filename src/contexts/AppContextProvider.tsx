@@ -14,12 +14,15 @@ import {
 } from '../../shared/constants';
 import { queryMonths } from '../services/monthly-unemployment-data';
 
+import { miscFns } from 'helper-toolkit-ts';
+
 export type AppContextValue = {
     unemploymentDataPathsUS: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsCounties: MonthlyUmempolymentDataPaths;
     unemploymentDataByFIPS: UnempolymentDataByFIPS;
     months: string[];
+    isMobileDevice?: boolean;
 };
 
 type AppContextProviderProps = {
@@ -74,6 +77,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 unemploymentDataPathsUS,
                 unemploymentDataByFIPS,
                 months,
+                isMobileDevice: miscFns.isMobileDevice(),
             });
         } catch (err) {
             console.error(err);

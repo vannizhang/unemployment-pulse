@@ -33,10 +33,6 @@ const StatisticsInfoContainer = styled.div`
     display: flex;
 `;
 
-const FlexContainer = styled.div`
-    display: flex;
-`;
-
 const InfoTextWrap = styled.div`
     border-right: 1px solid ${SEPARATOR_COLOR};
     width: 135px;
@@ -55,7 +51,7 @@ type STATS_DATA = {
 };
 
 const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
-    const { months } = useContext<AppContextValue>(AppContext);
+    const { months, isMobileDevice } = useContext<AppContextValue>(AppContext);
 
     const [lastMonth, lastYear, lowest, highest] = useMemo(() => {
         return getStatistics(data, months);
@@ -67,19 +63,32 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                 <ThemeText>Unemployment Rate</ThemeText>
             </div>
 
-            <FlexContainer>
+            <div
+                style={{
+                    display: 'flex',
+                    marginBottom: isMobileDevice ? '1rem' : 'unset',
+                }}
+            >
                 <UnemploymentRateTextWrap>
                     <div
                         style={{
                             display: 'flex',
                         }}
                     >
-                        <ThemeText color="orange" customFontSize="7rem">
+                        <ThemeText
+                            color="orange"
+                            customFontSize={isMobileDevice ? '5rem' : '7rem'}
+                        >
                             {data.attributes.unemploymentRate}
                         </ThemeText>
 
                         <span className="leader-half">
-                            <ThemeText color="orange" customFontSize="4rem">
+                            <ThemeText
+                                color="orange"
+                                customFontSize={
+                                    isMobileDevice ? '2rem' : '4rem'
+                                }
+                            >
                                 %
                             </ThemeText>
                         </span>
@@ -111,11 +120,13 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                         </ThemeText>
                         <br />
                         <ThemeText customLineHeight="1">
-                            of 3,141 US Counties
+                            {data.attributes.fips.length === 2
+                                ? 'of 50 US States'
+                                : 'of 3,141 US Counties'}
                         </ThemeText>
                     </div>
                 </div>
-            </FlexContainer>
+            </div>
 
             <StatisticsInfoContainer>
                 <InfoTextWrap>

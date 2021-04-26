@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classnames from 'classnames';
 // import styled from 'styled-components';
 
 import { THEME_COLOR_ORANGE, THEME_COLOR_BLUE } from '../../constants/style';
+import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+import { FontSize } from 'components/Atoms/CalciteElements/typing';
 
 type Props = {
     value: string;
@@ -46,9 +48,23 @@ export const ThemeText: React.FC<TextProp> = ({
     customLineHeight,
     children,
 }: TextProp) => {
-    const fontSize = !customFontSize ? FontSizeLookup[size] : '';
+    // const fontSize = !customFontSize ? FontSizeLookup[size] : '';
 
-    const classNames = classnames(`avenir-bold ${fontSize}`, {
+    // const { isMobileDevice } = useContext<AppContextValue>(AppContext)
+
+    const getFontSizeClass = (): FontSizeClass | '' => {
+        if (customFontSize) {
+            return '';
+        }
+
+        // if(isMobileDevice){
+        //     return 'font-size--1';
+        // }
+
+        return FontSizeLookup[size];
+    };
+
+    const classNames = classnames(`avenir-bold ${getFontSizeClass()}`, {
         'text-theme-color-orange': color === 'orange',
         'text-theme-color-blue': color === 'blue',
     });

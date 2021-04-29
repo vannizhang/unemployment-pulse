@@ -1,0 +1,96 @@
+import React from 'react';
+
+import styled from 'styled-components';
+import { ThemeText } from '../InfoPanel/InfoText';
+
+import { PANEL_BACKGROUND, THEME_COLOR_BLUE } from '../../constants/style';
+
+const HeaderContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    background: linear-gradient(
+        to bottom,
+        ${PANEL_BACKGROUND} 0%,
+        ${PANEL_BACKGROUND} 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 5;
+    box-sizing: border-box;
+    padding: 0.5rem 1rem;
+
+    svg {
+        fill: ${THEME_COLOR_BLUE};
+        stroke: ${THEME_COLOR_BLUE};
+    }
+`;
+
+const Title = () => {
+    return (
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <div className="phone-hide">
+                <ThemeText size="large" color="orange">
+                    UnemploymentPulse
+                </ThemeText>
+            </div>
+
+            <div
+                className="margin-left-1 margin-right-1 tablet-hide"
+                style={{
+                    lineHeight: '1.2',
+                }}
+            >
+                <ThemeText
+                    // size='large'
+                    color="blue"
+                    customLineHeight="1"
+                >
+                    14-Month US State and County
+                </ThemeText>
+
+                <br />
+
+                <ThemeText
+                    // size='large'
+                    color="blue"
+                    customLineHeight="1"
+                >
+                    Unemployment Trend Lines
+                </ThemeText>
+            </div>
+
+            <div
+                className="leader-quarter"
+                style={{
+                    cursor: 'pointer',
+                }}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    height="24"
+                    width="24"
+                >
+                    <path d="M12.5 7.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM13 18V9h-2v1h1v8h-1v1h3v-1zm9.8-5.5A10.3 10.3 0 1 1 12.5 2.2a10.297 10.297 0 0 1 10.3 10.3zm-1 0a9.3 9.3 0 1 0-9.3 9.3 9.31 9.31 0 0 0 9.3-9.3z" />
+                </svg>
+            </div>
+        </div>
+    );
+};
+
+const Header = () => {
+    return (
+        <HeaderContainer>
+            <Title />
+        </HeaderContainer>
+    );
+};
+
+export default Header;

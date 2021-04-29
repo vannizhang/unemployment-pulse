@@ -8,6 +8,7 @@ import {
     QueryTaskLayer,
     QueryResultLayer,
     InfoPanel,
+    Header,
 } from '../';
 
 import {
@@ -68,6 +69,8 @@ const AppLayout = () => {
 
     return (
         <>
+            <Header />
+
             <MapView webmapId={WEB_MAP_ID}>
                 <SparklineLayer
                     showDeviation={showDeviation}

@@ -21,9 +21,14 @@ const InfoPanelContainer = styled.div`
     height: 250px;
     display: flex;
     box-sizing: border-box;
-    background-color: ${PANEL_BACKGROUND};
+    background: linear-gradient(
+        to top,
+        ${PANEL_BACKGROUND} 0%,
+        ${PANEL_BACKGROUND} 80%,
+        rgba(0, 0, 0, 0) 100%
+    );
     padding: 1rem 2rem;
-    box-shadow: 0 0 10px 2px #156aa4;
+    /* box-shadow: 0 0 10px 2px #156aa4; */
     z-index: 5;
 
     @media (max-width: ${BREAKPOINT_SMALL}px) {
@@ -55,7 +60,7 @@ type Props = {
 
 const InfoPanel: React.FC<Props> = ({ data, close }: Props) => {
     return data ? (
-        <InfoPanelContainer>
+        <InfoPanelContainer className="animate-fade-in">
             <SummaryInfo data={data} />
             <UnemploymentInfo data={data} />
             <Chart data={data} />

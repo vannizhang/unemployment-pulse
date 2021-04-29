@@ -45,6 +45,9 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
                 }),
                 center,
                 zoom,
+                padding: {
+                    top: 60,
+                },
             });
 
             view.when(() => {

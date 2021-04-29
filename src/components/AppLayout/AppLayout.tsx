@@ -69,7 +69,12 @@ const AppLayout = () => {
 
     return (
         <>
-            <Header />
+            <Header>
+                <SparklineLayerSwitcher
+                    showDeviation={showDeviation}
+                    onChange={setShowDeviation.bind(this, !showDeviation)}
+                />
+            </Header>
 
             <MapView webmapId={WEB_MAP_ID}>
                 <SparklineLayer
@@ -108,11 +113,6 @@ const AppLayout = () => {
 
                 <QueryResultLayer queryResult={selectedFeature} />
             </MapView>
-
-            <SparklineLayerSwitcher
-                showDeviation={showDeviation}
-                onChange={setShowDeviation.bind(this, !showDeviation)}
-            />
 
             <InfoPanel
                 data={unemploymentData4SelectedFeature}

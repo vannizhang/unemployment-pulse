@@ -2,8 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { ThemeText } from '../InfoPanel/InfoText';
+import { SparklineLayerSwitcher } from '../';
 
 import { PANEL_BACKGROUND, THEME_COLOR_BLUE } from '../../constants/style';
+
+type Props = {
+    children: React.ReactNode;
+};
 
 const HeaderContainer = styled.div`
     position: absolute;
@@ -20,6 +25,7 @@ const HeaderContainer = styled.div`
     z-index: 5;
     box-sizing: border-box;
     padding: 0.5rem 1rem;
+    justify-content: space-between;
 
     svg {
         fill: ${THEME_COLOR_BLUE};
@@ -85,10 +91,12 @@ const Title = () => {
     );
 };
 
-const Header = () => {
+const Header: React.FC<Props> = ({ children }: Props) => {
     return (
         <HeaderContainer>
             <Title />
+
+            {children}
         </HeaderContainer>
     );
 };

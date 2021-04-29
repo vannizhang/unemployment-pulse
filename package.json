@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "visualize latest 14 months of unemployment statistics from the U.S. Bureau of Labor Statistics.",
   "main": "index.js",
+  "title": "UnemploymentPulse",
   "scripts": {
     "test": "jest --passWithNoTests",
     "start": "webpack-dev-server --mode development --open",

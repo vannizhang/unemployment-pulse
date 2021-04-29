@@ -31,11 +31,11 @@ const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
             ]) as Promise<Modules>);
 
             const layer = new GraphicsLayer({
-                opacity: 0.8,
-                effect: 'blur(3px)',
+                opacity: 0.2,
+                // effect: 'blur(3px)',
             });
 
-            mapView.map.add(layer);
+            mapView.map.add(layer, 0);
 
             setGraphicLayer(layer);
         } catch (err) {
@@ -61,12 +61,12 @@ const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
         });
 
         graphic.symbol = new SimpleFillSymbol({
-            color: [0, 0, 0, 0],
-            outline: {
-                // autocasts as new SimpleLineSymbol()
-                color: SPARKLINE_COLOR_ORANGE,
-                width: 1,
-            },
+            color: [33, 117, 160, 255],
+            // outline: {
+            //     // autocasts as new SimpleLineSymbol()
+            //     color: SPARKLINE_COLOR_ORANGE,
+            //     width: 1,
+            // },
         });
 
         graphicLayer.add(graphic);

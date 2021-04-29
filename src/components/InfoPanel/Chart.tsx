@@ -51,9 +51,13 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                     right: '1rem',
                 }}
             >
-                <ThemeText color="orange">Local Unemployment</ThemeText>
+                <ThemeText color="orange" size="small">
+                    Local Unemployment
+                </ThemeText>
                 <br />
-                <ThemeText color="blue">National Unemployment</ThemeText>
+                <ThemeText color="blue" size="small">
+                    National Unemployment
+                </ThemeText>
             </div>
             <BarLineCombined data4Bars={data4Bars} data4Line={data4Line} />
         </div>

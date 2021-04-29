@@ -12,7 +12,8 @@ type Props = {
 };
 
 const SummaryInfoContainer = styled.div`
-    margin-right: 4rem;
+    margin-right: 2rem;
+    width: 380px;
 `;
 
 const SummaryInfo: React.FC<Props> = ({ data }: Props) => {

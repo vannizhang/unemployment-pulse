@@ -10,6 +10,8 @@ import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 const UnemploymentInfoContainer = styled.div`
     margin-right: 4rem;
+    /* border-left: 1px solid ${SEPARATOR_COLOR};
+    border-right: 1px solid ${SEPARATOR_COLOR}; */
 
     @media (max-width: ${BREAKPOINT_SMALL}px) {
         margin-right: unset;
@@ -39,7 +41,7 @@ const StatisticsInfoContainer = styled.div`
 
 const InfoTextWrap = styled.div`
     border-right: 1px solid ${SEPARATOR_COLOR};
-    width: 135px;
+    min-width: 85px;
     padding-right: 0.75rem;
     margin-right: 1rem;
 
@@ -114,6 +116,7 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                     <div
                         style={{
                             lineHeight: '1.2',
+                            marginTop: '.75rem',
                             marginBottom: '.75rem',
                         }}
                     >
@@ -126,14 +129,14 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                         }}
                     >
                         <ThemeText customLineHeight="1">
-                            Rank #
+                            Ranks #
                             {numberFns.numberWithCommas(data.attributes.rank)}
                         </ThemeText>
                         <br />
                         <ThemeText customLineHeight="1">
                             {data.attributes.fips.length === 2
-                                ? 'of 50 US States'
-                                : 'of 3,141 US Counties'}
+                                ? 'of 50 States and DC'
+                                : 'of 3,141 Counties'}
                         </ThemeText>
                     </div>
                 </div>
@@ -156,14 +159,14 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
 
                 <InfoTextWrap>
                     <InfoText
-                        title="14 Month HIGH"
+                        title="14-Month HIGH"
                         subtitle={highest.month}
                         value={highest.value.toString()}
                     />
                 </InfoTextWrap>
 
                 <InfoText
-                    title="14 Month LOW"
+                    title="14-Month LOW"
                     subtitle={lowest.month}
                     value={lowest.value.toString()}
                 />

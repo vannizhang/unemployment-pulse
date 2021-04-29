@@ -101,7 +101,12 @@ const InfoText: React.FC<Props> = ({ value, title, subtitle }: Props) => {
                 </ThemeText>
 
                 {subtitle ? (
-                    <div className="margin-left-quarter">
+                    <div
+                        className="margin-left-quarter"
+                        style={{
+                            lineHeight: '1',
+                        }}
+                    >
                         <ThemeText
                             color="orange"
                             size="small"

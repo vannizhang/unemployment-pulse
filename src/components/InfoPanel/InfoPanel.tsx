@@ -37,6 +37,8 @@ const InfoPanelContainer = styled.div`
         height: unset;
         flex-direction: column;
         overflow-y: auto;
+
+        background: ${PANEL_BACKGROUND};
     }
 `;
 

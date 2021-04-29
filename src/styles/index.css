@@ -11,3 +11,11 @@ body {
 .text-theme-color-orange {
     color: #FF8000
 }
+
+#root .esri-widget--button {
+    /* filter: invert(1);
+     */
+
+    background: #031A39;
+    color: #FF8000;
+}

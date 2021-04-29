@@ -47,7 +47,7 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 className="text-right"
                 style={{
                     position: 'absolute',
-                    top: '.25rem',
+                    top: '.75rem',
                     right: '1rem',
                 }}
             >
@@ -57,6 +57,10 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 <br />
                 <ThemeText color="blue" size="small">
                     National Unemployment
+                </ThemeText>
+                <br />
+                <ThemeText color="blue">
+                    {data4Line ? data4Line[data4Line.length - 1].value : ''}%
                 </ThemeText>
             </div>
             <BarLineCombined data4Bars={data4Bars} data4Line={data4Line} />

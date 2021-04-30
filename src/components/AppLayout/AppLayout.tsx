@@ -9,6 +9,7 @@ import {
     QueryResultLayer,
     InfoPanel,
     Header,
+    About,
 } from '../';
 
 import {
@@ -54,6 +55,8 @@ const AppLayout = () => {
 
     const [selectedFeature, setSelectedFeature] = useState<IGraphic>();
 
+    const [showAbout, setShowAbout] = useState<boolean>(false);
+
     useEffect(() => {
         if (selectedFeature) {
             const FIPS = selectedFeature
@@ -69,7 +72,12 @@ const AppLayout = () => {
 
     return (
         <>
-            <Header>
+            <About
+                isActive={showAbout}
+                onClose={setShowAbout.bind(this, false)}
+            />
+
+            <Header infoBtnOnClick={setShowAbout.bind(this, true)}>
                 <SparklineLayerSwitcher
                     showDeviation={showDeviation}
                     onChange={setShowDeviation.bind(this, !showDeviation)}

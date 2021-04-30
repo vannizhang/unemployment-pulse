@@ -12,6 +12,7 @@ import {
 
 type Props = {
     children: React.ReactNode;
+    infoBtnOnClick: () => void;
 };
 
 const HeaderContainer = styled.div`
@@ -54,7 +55,7 @@ const SubTitle = styled.div`
     }
 `;
 
-const Title = () => {
+const Title = ({ infoBtnOnClick }: { infoBtnOnClick: () => void }) => {
     return (
         <div
             style={{
@@ -98,6 +99,7 @@ const Title = () => {
                 style={{
                     cursor: 'pointer',
                 }}
+                onClick={infoBtnOnClick}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -112,10 +114,10 @@ const Title = () => {
     );
 };
 
-const Header: React.FC<Props> = ({ children }: Props) => {
+const Header: React.FC<Props> = ({ children, infoBtnOnClick }: Props) => {
     return (
         <HeaderContainer>
-            <Title />
+            <Title infoBtnOnClick={infoBtnOnClick} />
 
             {children}
         </HeaderContainer>

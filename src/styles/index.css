@@ -19,3 +19,7 @@ body {
     background: #031A39;
     color: #FF8000;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}

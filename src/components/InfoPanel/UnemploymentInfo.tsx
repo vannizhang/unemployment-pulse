@@ -10,8 +10,6 @@ import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 const UnemploymentInfoContainer = styled.div`
     margin-right: 4rem;
-    /* border-left: 1px solid ${SEPARATOR_COLOR};
-    border-right: 1px solid ${SEPARATOR_COLOR}; */
 
     @media (max-width: ${BREAKPOINT_SMALL}px) {
         margin-right: unset;
@@ -222,7 +220,7 @@ const unemploymentCategory = (rate: number): React.ReactNode => {
     if (rate < 4) {
         return (
             <>
-                <ThemeText customLineHeight="1">indicative of an</ThemeText>
+                <ThemeText customLineHeight="1">Indicative of an</ThemeText>
                 <br />
                 <ThemeText customLineHeight="1">Economic Boom</ThemeText>
             </>

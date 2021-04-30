@@ -86,12 +86,27 @@ export const downloadACSData = async()=>{
                 B01001_001E
             } = feature.attributes;
 
-            // remove the word "county" from end of the county name 
-            const countyName = NAME.split(' ').slice(0, -1).join(' ');
-            const stateName = getStateAbbrev(GEOID.slice(0,2))
+            let countyName = NAME;
+
+            if(/\sCensus Area/gi.test(NAME)){
+                countyName = NAME.replace(/\sCensus Area/gi, '');
+            } 
+            else if (/\sCity and Borough/gi.test(NAME)){
+                countyName = NAME.replace(/\sCity and Borough/gi, '');
+            }
+            else {
+                // remove the word "county" from end of the county name 
+                countyName = NAME.split(' ').slice(0, -1).join(' ');
+            }
+
+            const stateName = getStateAbbrev(GEOID.slice(0,2));
+
+            const name = GEOID === '11001' 
+                ? stateName 
+                : countyName + ', ' + stateName;
     
             populationLookup[GEOID] = {
-                name: countyName + ', ' + stateName,
+                name,
                 population: B01001_001E
             }
         }

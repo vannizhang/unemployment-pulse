@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { ThemeText } from '../InfoPanel/InfoText';
 import { SparklineLayerSwitcher } from '../';
 
-import { PANEL_BACKGROUND, THEME_COLOR_BLUE } from '../../constants/style';
+import {
+    PANEL_BACKGROUND,
+    THEME_COLOR_BLUE,
+    BREAKPOINT_SMALL,
+} from '../../constants/style';
 
 type Props = {
     children: React.ReactNode;
@@ -33,6 +37,23 @@ const HeaderContainer = styled.div`
     }
 `;
 
+const AppTitle = styled.div`
+    margin-right: 0.5rem;
+
+    @media (max-width: 826px) {
+        display: none;
+    }
+`;
+
+const SubTitle = styled.div`
+    margin: 0 0.5rem;
+    line-height: 1.2;
+
+    @media (max-width: 1113px) {
+        display: none;
+    }
+`;
+
 const Title = () => {
     return (
         <div
@@ -41,14 +62,14 @@ const Title = () => {
                 alignItems: 'center',
             }}
         >
-            <div className="phone-hide">
+            <AppTitle>
                 <ThemeText size="large" color="orange">
                     UnemploymentPulse
                 </ThemeText>
-            </div>
+            </AppTitle>
 
-            <div
-                className="margin-left-1 margin-right-1 tablet-hide"
+            <SubTitle
+                className="margin-left-1 margin-right-1"
                 style={{
                     lineHeight: '1.2',
                 }}
@@ -70,7 +91,7 @@ const Title = () => {
                 >
                     Unemployment Trend Lines
                 </ThemeText>
-            </div>
+            </SubTitle>
 
             <div
                 className="leader-quarter"

@@ -31,7 +31,8 @@ const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
             ]) as Promise<Modules>);
 
             const layer = new GraphicsLayer({
-                opacity: 0.2,
+                // opacity: 0.3,
+                blendMode: 'overlay',
                 // effect: 'blur(3px)',
             });
 
@@ -61,12 +62,12 @@ const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
         });
 
         graphic.symbol = new SimpleFillSymbol({
-            color: [33, 117, 160, 255],
-            // outline: {
-            //     // autocasts as new SimpleLineSymbol()
-            //     color: SPARKLINE_COLOR_ORANGE,
-            //     width: 1,
-            // },
+            color: [255, 255, 255, 0.5], //[33, 117, 160, 255],
+            outline: {
+                // autocasts as new SimpleLineSymbol()
+                color: [255, 255, 255, 255],
+                width: 1,
+            },
         });
 
         graphicLayer.add(graphic);

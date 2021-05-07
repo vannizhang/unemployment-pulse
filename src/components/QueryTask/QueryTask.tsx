@@ -17,6 +17,7 @@ type Props = {
         min: number;
         max: number;
     };
+    defaultFIPS?: string;
     // onStart?: ()=>void;
     onSelect: (feature: IGraphic) => void;
     // pointerOnMove: (position: TooltipPosition) => void;
@@ -29,6 +30,7 @@ const QueryTaskLayer: React.FC<Props> = ({
     outFields,
     mapView,
     visibleScale,
+    defaultFIPS,
     // onStart,
     onSelect,
     // pointerOnMove,
@@ -74,11 +76,28 @@ const QueryTaskLayer: React.FC<Props> = ({
                 layerRef.current = layer;
                 layerViewRef.current = layerView;
 
+                if (defaultFIPS) {
+                    queryDefaultFeature();
+                }
+
                 initEventListeners();
             });
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const queryDefaultFeature = () => {
+        layerViewRef.current.watch('updating', (isUpdating) => {
+            // wait for the layer view to finish updating
+            if (!isUpdating) {
+                const fieldName4FIPS = outFields[0];
+                const where = `${fieldName4FIPS}='${defaultFIPS}'`;
+                queryFeatures({
+                    where,
+                });
+            }
+        });
     };
 
     const queryFeatures = async ({
@@ -104,11 +123,9 @@ const QueryTaskLayer: React.FC<Props> = ({
                 outFields: outFields || ['*'],
             });
 
-            onSelect(
-                results.features && results.features.length
-                    ? results.features[0]
-                    : undefined
-            );
+            if (results.features && results.features.length) {
+                onSelect(results.features[0]);
+            }
         }
     };
 
@@ -123,17 +140,6 @@ const QueryTaskLayer: React.FC<Props> = ({
             init();
         }
     }, [mapView]);
-
-    // useEffect(()=>{
-    //     if(layerViewRef.current && defaultFIPS){
-
-    //         const fieldName4FIPS = outFields[0]
-    //         const where = `${fieldName4FIPS}='${defaultFIPS}'`
-    //         queryFeatures({
-    //             where
-    //         })
-    //     }
-    // }, [layerViewRef.current])
 
     return null;
 };

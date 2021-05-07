@@ -108,7 +108,11 @@ const AppLayout = () => {
                     url={URL_US_COUNTIES_GENERALIZED}
                     outFields={['FIPS']}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
-                    defaultFIPS={defaultFIPS.length === 5 ? defaultFIPS : null}
+                    defaultFIPS={
+                        defaultFIPS && defaultFIPS.length === 5
+                            ? defaultFIPS
+                            : null
+                    }
                     onSelect={setSelectedFeature}
                 />
 
@@ -117,7 +121,11 @@ const AppLayout = () => {
                     url={URL_US_STATES_GENERALIZED}
                     outFields={['STATE_FIPS']}
                     visibleScale={VISIBLE_SCALE_STATES}
-                    defaultFIPS={defaultFIPS.length === 2 ? defaultFIPS : null}
+                    defaultFIPS={
+                        defaultFIPS && defaultFIPS.length === 2
+                            ? defaultFIPS
+                            : null
+                    }
                     onSelect={setSelectedFeature}
                 />
 

@@ -37,7 +37,7 @@ const QueryTaskLayer: React.FC<Props> = ({
     // featureOnHover,
 }) => {
     const layerRef = useRef<IFeatureLayer>();
-    const layerViewRef = useRef<IFeatureLayerView>();
+    // const layerViewRef = useRef<IFeatureLayerView>();
     // const mouseMoveDelay = useRef<number>();
 
     const isLayerInVisibleRange = () => {
@@ -62,7 +62,7 @@ const QueryTaskLayer: React.FC<Props> = ({
                 // },
                 minScale: visibleScale && visibleScale.min,
                 maxScale: visibleScale && visibleScale.max,
-                visible: true,
+                visible: false,
                 popupEnabled: false,
                 outFields,
                 opacity: 0,
@@ -70,33 +70,48 @@ const QueryTaskLayer: React.FC<Props> = ({
 
             mapView.map.add(layer);
 
-            mapView.whenLayerView(layer).then((layerView) => {
-                // console.log(layerView)
+            layerRef.current = layer;
+            // layerViewRef.current = layerView;
 
-                layerRef.current = layer;
-                layerViewRef.current = layerView;
+            if (defaultFIPS) {
+                queryDefaultFeature();
+            }
 
-                if (defaultFIPS) {
-                    queryDefaultFeature();
-                }
+            initEventListeners();
 
-                initEventListeners();
-            });
+            // mapView.whenLayerView(layer).then((layerView) => {
+            //     // console.log(layerView)
+
+            //     layerRef.current = layer;
+            //     layerViewRef.current = layerView;
+
+            //     if (defaultFIPS) {
+            //         queryDefaultFeature();
+            //     }
+
+            //     initEventListeners();
+            // });
         } catch (err) {
             console.error(err);
         }
     };
 
     const queryDefaultFeature = () => {
-        layerViewRef.current.watch('updating', (isUpdating) => {
-            // wait for the layer view to finish updating
-            if (!isUpdating) {
-                const fieldName4FIPS = outFields[0];
-                const where = `${fieldName4FIPS}='${defaultFIPS}'`;
-                queryFeatures({
-                    where,
-                });
-            }
+        // layerViewRef.current.watch('updating', (isUpdating) => {
+        //     // wait for the layer view to finish updating
+        //     if (!isUpdating) {
+        //         const fieldName4FIPS = outFields[0];
+        //         const where = `${fieldName4FIPS}='${defaultFIPS}'`;
+        //         queryFeatures({
+        //             where,
+        //         });
+        //     }
+        // });
+
+        const fieldName4FIPS = outFields[0];
+        const where = `${fieldName4FIPS}='${defaultFIPS}'`;
+        queryFeatures({
+            where,
         });
     };
 
@@ -116,7 +131,7 @@ const QueryTaskLayer: React.FC<Props> = ({
 
             const geometry = event ? mapView.toMap(event) : null;
 
-            const results = await layerViewRef.current.queryFeatures({
+            const results = await layerRef.current.queryFeatures({
                 where,
                 geometry,
                 returnGeometry: true,

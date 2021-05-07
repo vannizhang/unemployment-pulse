@@ -13,3 +13,5 @@ export { default as QueryTaskLayer } from './QueryTask/QueryTask';
 export { default as SparklineLayer } from './SparklineLayer/SparklineLayer';
 
 export { default as SparklineLayerSwitcher } from './SparklineLayerSwitcher/SparklineLayerSwitcher';
+
+export { default as PlaceAutoComplete } from './PlaceAutocomplete/PlaceAutocomplete';

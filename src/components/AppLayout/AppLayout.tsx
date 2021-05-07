@@ -10,6 +10,7 @@ import {
     InfoPanel,
     Header,
     About,
+    PlaceAutoComplete,
 } from '../';
 
 import {
@@ -140,6 +141,20 @@ const AppLayout = () => {
                     updateFIPSInURLHashParams();
                 }}
             />
+
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '2rem',
+                    left: '1rem',
+                }}
+            >
+                <PlaceAutoComplete
+                    onSelect={(placeData) => {
+                        console.log(placeData);
+                    }}
+                />
+            </div>
         </>
     );
 };

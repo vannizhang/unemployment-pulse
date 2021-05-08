@@ -58,6 +58,10 @@ const AppLayout = () => {
 
     const [showAbout, setShowAbout] = useState<boolean>(false);
 
+    const [FIPS4SelectedFeature, setFIPS4SelectedFeature] = useState<string>(
+        defaultFIPS
+    );
+
     useEffect(() => {
         if (selectedFeature) {
             const FIPS = selectedFeature
@@ -65,11 +69,16 @@ const AppLayout = () => {
                   selectedFeature.attributes['STATE_FIPS']
                 : undefined;
 
-            setUnemploymentData4SelectedFeature(unemploymentDataByFIPS[FIPS]);
-
-            updateFIPSInURLHashParams(FIPS);
+            setFIPS4SelectedFeature(FIPS);
         }
     }, [selectedFeature]);
+
+    useEffect(() => {
+        setUnemploymentData4SelectedFeature(
+            unemploymentDataByFIPS[FIPS4SelectedFeature]
+        );
+        updateFIPSInURLHashParams(FIPS4SelectedFeature);
+    }, [FIPS4SelectedFeature]);
 
     return (
         <>
@@ -109,9 +118,10 @@ const AppLayout = () => {
                     url={URL_US_COUNTIES_GENERALIZED}
                     outFields={['FIPS']}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
-                    defaultFIPS={
-                        defaultFIPS && defaultFIPS.length === 5
-                            ? defaultFIPS
+                    FIPS={
+                        FIPS4SelectedFeature &&
+                        FIPS4SelectedFeature.length === 5
+                            ? FIPS4SelectedFeature
                             : null
                     }
                     onSelect={setSelectedFeature}
@@ -122,9 +132,10 @@ const AppLayout = () => {
                     url={URL_US_STATES_GENERALIZED}
                     outFields={['STATE_FIPS']}
                     visibleScale={VISIBLE_SCALE_STATES}
-                    defaultFIPS={
-                        defaultFIPS && defaultFIPS.length === 2
-                            ? defaultFIPS
+                    FIPS={
+                        FIPS4SelectedFeature &&
+                        FIPS4SelectedFeature.length === 2
+                            ? FIPS4SelectedFeature
                             : null
                     }
                     onSelect={setSelectedFeature}
@@ -151,7 +162,8 @@ const AppLayout = () => {
             >
                 <PlaceAutoComplete
                     onSelect={(placeData) => {
-                        console.log(placeData);
+                        // console.log(placeData);
+                        setFIPS4SelectedFeature(placeData.fips);
                     }}
                 />
             </div>

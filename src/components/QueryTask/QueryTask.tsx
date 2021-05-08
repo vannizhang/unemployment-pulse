@@ -17,7 +17,7 @@ type Props = {
         min: number;
         max: number;
     };
-    defaultFIPS?: string;
+    FIPS?: string;
     // onStart?: ()=>void;
     onSelect: (feature: IGraphic) => void;
     // pointerOnMove: (position: TooltipPosition) => void;
@@ -30,7 +30,7 @@ const QueryTaskLayer: React.FC<Props> = ({
     outFields,
     mapView,
     visibleScale,
-    defaultFIPS,
+    FIPS,
     // onStart,
     onSelect,
     // pointerOnMove,
@@ -73,8 +73,8 @@ const QueryTaskLayer: React.FC<Props> = ({
             layerRef.current = layer;
             // layerViewRef.current = layerView;
 
-            if (defaultFIPS) {
-                queryDefaultFeature();
+            if (FIPS) {
+                queryFeatureByFIPS();
             }
 
             initEventListeners();
@@ -96,20 +96,9 @@ const QueryTaskLayer: React.FC<Props> = ({
         }
     };
 
-    const queryDefaultFeature = () => {
-        // layerViewRef.current.watch('updating', (isUpdating) => {
-        //     // wait for the layer view to finish updating
-        //     if (!isUpdating) {
-        //         const fieldName4FIPS = outFields[0];
-        //         const where = `${fieldName4FIPS}='${defaultFIPS}'`;
-        //         queryFeatures({
-        //             where,
-        //         });
-        //     }
-        // });
-
+    const queryFeatureByFIPS = () => {
         const fieldName4FIPS = outFields[0];
-        const where = `${fieldName4FIPS}='${defaultFIPS}'`;
+        const where = `${fieldName4FIPS}='${FIPS}'`;
         queryFeatures({
             where,
         });
@@ -126,7 +115,7 @@ const QueryTaskLayer: React.FC<Props> = ({
 
         const isVisible = isLayerInVisibleRange();
 
-        if (isVisible) {
+        if (isVisible || where) {
             where = where || '1=1';
 
             const geometry = event ? mapView.toMap(event) : null;
@@ -140,6 +129,10 @@ const QueryTaskLayer: React.FC<Props> = ({
 
             if (results.features && results.features.length) {
                 onSelect(results.features[0]);
+            }
+
+            if (where) {
+                mapView.goTo(results.features[0].geometry);
             }
         }
     };
@@ -155,6 +148,12 @@ const QueryTaskLayer: React.FC<Props> = ({
             init();
         }
     }, [mapView]);
+
+    useEffect(() => {
+        if (layerRef.current && FIPS) {
+            queryFeatureByFIPS();
+        }
+    }, [FIPS]);
 
     return null;
 };

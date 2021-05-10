@@ -10,6 +10,7 @@ import Trie, { PlaceData } from './Trie';
 import {
     AUTOCOMPLETE_BACKGROUND,
     AUTOCOMPLETE_LIGHT_BACKGROUND,
+    PANEL_BACKGROUND,
     THEME_COLOR_ORANGE,
 } from '../../constants/style';
 import { ThemeText } from '../InfoPanel/InfoText';
@@ -24,19 +25,20 @@ type AutocompleteItemProps = {
     isCandidate?: boolean;
 };
 
-const BACKGROUND_COLOR = 'rgba(19, 106, 164, .5)';
-const BACKGROUND_COLOR_HOVER = 'rgba(19, 106, 164, .55)';
+const BACKGROUND_COLOR = 'rgba(3, 26, 57, 0.5)'; // 'rgba(19, 106, 164, .4)';
+const BACKGROUND_COLOR_HOVER = 'rgba(19, 106, 164, .2)';
 const BORDER_COLOR = '#136AA4';
 
 const AutocompleteWarp = styled.div`
-    border-top: 1px solid ${BORDER_COLOR};
+    /* border: 1px solid ${BORDER_COLOR}; */
+    background: ${BACKGROUND_COLOR};
 `;
 
 const AutocompleteItem = styled.div<AutocompleteItemProps>`
     color: ${THEME_COLOR_ORANGE};
     background-color: ${(props) =>
-        props.isCandidate ? BACKGROUND_COLOR_HOVER : BACKGROUND_COLOR};
-    border-bottom: 1px solid ${BORDER_COLOR};
+        props.isCandidate ? BACKGROUND_COLOR_HOVER : 'transparent'};
+    /* border-bottom: 1px solid ${BORDER_COLOR}; */
     padding: 0.35rem 0.5rem;
     cursor: pointer;
 `;
@@ -51,6 +53,7 @@ const AutocompleteInput = styled.input`
         /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: ${THEME_COLOR_ORANGE};
         opacity: 0.75; /* Firefox */
+        font-style: italic;
     }
 `;
 
@@ -139,7 +142,9 @@ const PlaceAutocomplete: React.FC<Props> = ({
                         }}
                     >
                         <ThemeText color="orange">{name}</ThemeText>
-                        <ThemeText color="blue">{unemploymentRate}%</ThemeText>
+                        <ThemeText color="orange">
+                            {unemploymentRate}%
+                        </ThemeText>
                     </div>
                 </AutocompleteItem>
             );
@@ -180,7 +185,7 @@ const PlaceAutocomplete: React.FC<Props> = ({
             style={{
                 position: 'absolute',
                 bottom: bottomPosition ? bottomPosition : '2rem',
-                left: '1rem',
+                left: '2rem',
             }}
         >
             <div ref={containerRef}>
@@ -189,13 +194,26 @@ const PlaceAutocomplete: React.FC<Props> = ({
                 <AutocompleteInput
                     type="text"
                     autoComplete="off"
-                    placeholder="Search State or County"
+                    placeholder="Search state or county..."
                     value={searchTerm || ''}
                     spellCheck={false}
                     onChange={searchInputOnChange}
                     onKeyDown={searchInputOnKeyDown}
                 ></AutocompleteInput>
             </div>
+
+            {!searchTerm ? (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 0,
+                        opacity: 0.75,
+                    }}
+                >
+                    <span className="icon-ui-search text-theme-color-orange"></span>
+                </div>
+            ) : null}
         </div>
     );
 };

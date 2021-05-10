@@ -161,7 +161,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                         {
                                                             type:
                                                                 'CIMSolidStroke',
-                                                            width: 1,
+                                                            width: 1.5,
                                                             color,
                                                         },
                                                     ],
@@ -193,7 +193,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                               {
                                                                   type:
                                                                       'CIMSolidStroke',
-                                                                  width: 1,
+                                                                  width: 1.5,
                                                                   color: referenceLineColor,
                                                               },
                                                           ],
@@ -232,7 +232,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                               {
                                                                   type:
                                                                       'CIMSolidStroke',
-                                                                  width: 1,
+                                                                  width: 1.5,
                                                                   color: referenceLineColor,
                                                               },
                                                           ],

@@ -168,7 +168,8 @@ const PlaceAutocomplete: React.FC<Props> = ({
         }
 
         onSelect(selectedItem);
-        setSearchTerm(selectedItem.name);
+
+        setSearchTerm('');
     }, [selectedItem]);
 
     useEffect(() => {

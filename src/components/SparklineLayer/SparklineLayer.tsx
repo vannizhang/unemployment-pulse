@@ -27,6 +27,8 @@ type Props = {
     mapView?: IMapView;
 };
 
+const STROKE_WIDTH = 1.5;
+
 const SparklineLayer: React.FC<Props> = ({
     data,
     nationalLevelData,
@@ -161,7 +163,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                         {
                                                             type:
                                                                 'CIMSolidStroke',
-                                                            width: 1.5,
+                                                            width: STROKE_WIDTH,
                                                             color,
                                                         },
                                                     ],
@@ -193,7 +195,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                               {
                                                                   type:
                                                                       'CIMSolidStroke',
-                                                                  width: 1.5,
+                                                                  width: STROKE_WIDTH,
                                                                   color: referenceLineColor,
                                                               },
                                                           ],
@@ -232,7 +234,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                               {
                                                                   type:
                                                                       'CIMSolidStroke',
-                                                                  width: 1.5,
+                                                                  width: STROKE_WIDTH,
                                                                   color: referenceLineColor,
                                                               },
                                                           ],

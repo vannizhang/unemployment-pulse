@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { loadModules, loadCss } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
@@ -11,6 +11,8 @@ import {
     MapLocation,
 } from '../../utils/URLHashParams';
 
+import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+
 interface Props {
     webmapId: string;
     children?: React.ReactNode;
@@ -20,6 +22,8 @@ const defaultMapLocation = getDefaultValueFromHashParams('@') as MapLocation;
 
 const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
     const mapDivRef = React.useRef<HTMLDivElement>();
+
+    const { isMobileDevice } = useContext<AppContextValue>(AppContext);
 
     const [mapView, setMapView] = React.useState<IMapView>(null);
 
@@ -49,6 +53,10 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
                     top: 60,
                 },
             });
+
+            if (isMobileDevice) {
+                view.ui.remove('zoom');
+            }
 
             view.when(() => {
                 setMapView(view);

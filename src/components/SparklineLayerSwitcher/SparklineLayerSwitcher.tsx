@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 // import classnames from 'classnames';
 import { THEME_COLOR_ORANGE } from '../../constants/style';
 import { ThemeText } from '../InfoPanel/InfoText';
+
+import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 type Props = {
     showDeviation: boolean;
@@ -40,6 +42,8 @@ const SparklineLayerSwitcher: React.FC<Props> = ({
     showDeviation,
     onChange,
 }: Props) => {
+    const { isMobileDevice } = useContext<AppContextValue>(AppContext);
+
     return (
         <div
             style={{
@@ -52,13 +56,14 @@ const SparklineLayerSwitcher: React.FC<Props> = ({
                     color="orange"
                     // customLineHeight='1.1'
                 >
-                    Local Rate
+                    {isMobileDevice ? 'Local' : 'Local Rate'}
                 </ThemeText>{' '}
                 <ThemeText
                     color="blue"
                     // customLineHeight='1'
                 >
-                    {'& '} National Rate
+                    {'& '}{' '}
+                    {isMobileDevice ? 'National Unemployment' : 'National Rate'}
                 </ThemeText>
             </SwitcherBtn>
 
@@ -67,7 +72,7 @@ const SparklineLayerSwitcher: React.FC<Props> = ({
                     color="orange"
                     // customLineHeight='1'
                 >
-                    Local Difference
+                    {isMobileDevice ? 'Difference' : 'Local Difference'}
                 </ThemeText>{' '}
                 <ThemeText
                     color="blue"

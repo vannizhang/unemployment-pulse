@@ -46,6 +46,7 @@ const AppLayout = () => {
         unemploymentDataPathsCounties,
         unemploymentDataPathsUS,
         unemploymentDataByFIPS,
+        isMobileDevice,
     } = useContext<AppContextValue>(AppContext);
 
     // unemployment for selected county or state
@@ -159,7 +160,9 @@ const AppLayout = () => {
 
             <PlaceAutoComplete
                 bottomPosition={
-                    unemploymentData4SelectedFeature ? INFO_PANEL_HEIGHT : 0
+                    unemploymentData4SelectedFeature && !isMobileDevice
+                        ? INFO_PANEL_HEIGHT
+                        : 0
                 }
                 onSelect={(placeData) => {
                     // console.log(placeData);

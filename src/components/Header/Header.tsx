@@ -36,6 +36,10 @@ const HeaderContainer = styled.div`
         fill: ${THEME_COLOR_BLUE};
         stroke: ${THEME_COLOR_BLUE};
     }
+
+    @media (max-width: ${BREAKPOINT_SMALL}px) {
+        flex-direction: column-reverse;
+    }
 `;
 
 const AppTitle = styled.div`
@@ -55,72 +59,89 @@ const SubTitle = styled.div`
     }
 `;
 
+const InfoIcon: React.FC = () => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            height="24"
+            width="24"
+        >
+            <path d="M12.5 7.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM13 18V9h-2v1h1v8h-1v1h3v-1zm9.8-5.5A10.3 10.3 0 1 1 12.5 2.2a10.297 10.297 0 0 1 10.3 10.3zm-1 0a9.3 9.3 0 1 0-9.3 9.3 9.31 9.31 0 0 0 9.3-9.3z" />
+        </svg>
+    );
+};
+
 const Title = ({ infoBtnOnClick }: { infoBtnOnClick: () => void }) => {
     return (
-        <div
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-            }}
-        >
-            <AppTitle>
-                <ThemeText size="large" color="orange">
-                    UnemploymentPulse
-                </ThemeText>
-            </AppTitle>
-
-            <SubTitle
-                className="margin-left-1 margin-right-1"
+        <>
+            <div
                 style={{
-                    lineHeight: '1.2',
+                    display: 'flex',
+                    alignItems: 'center',
                 }}
             >
-                <ThemeText
-                    // size='large'
-                    color="blue"
-                    customLineHeight="1"
-                >
-                    14-Month US State and County
-                </ThemeText>
+                <AppTitle>
+                    <ThemeText size="large" color="orange">
+                        UnemploymentPulse
+                    </ThemeText>
+                </AppTitle>
 
-                <br />
-
-                <ThemeText
-                    // size='large'
-                    color="blue"
-                    customLineHeight="1"
+                <SubTitle
+                    className="margin-left-1 margin-right-1"
+                    style={{
+                        lineHeight: '1.2',
+                    }}
                 >
-                    Unemployment Trend Lines
-                </ThemeText>
-            </SubTitle>
+                    <ThemeText
+                        // size='large'
+                        color="blue"
+                        customLineHeight="1"
+                    >
+                        14-Month US State and County
+                    </ThemeText>
+
+                    <br />
+
+                    <ThemeText
+                        // size='large'
+                        color="blue"
+                        customLineHeight="1"
+                    >
+                        Unemployment Trend Lines
+                    </ThemeText>
+                </SubTitle>
+
+                <div
+                    className="leader-quarter phone-hide"
+                    style={{
+                        cursor: 'pointer',
+                    }}
+                    onClick={infoBtnOnClick}
+                >
+                    <InfoIcon />
+                </div>
+            </div>
 
             <div
-                className="leader-quarter"
-                style={{
-                    cursor: 'pointer',
-                }}
+                className="phone-show leader-half margin-left-quarter"
                 onClick={infoBtnOnClick}
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    height="24"
-                    width="24"
-                >
-                    <path d="M12.5 7.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM13 18V9h-2v1h1v8h-1v1h3v-1zm9.8-5.5A10.3 10.3 0 1 1 12.5 2.2a10.297 10.297 0 0 1 10.3 10.3zm-1 0a9.3 9.3 0 1 0-9.3 9.3 9.31 9.31 0 0 0 9.3-9.3z" />
-                </svg>
+                <InfoIcon />
             </div>
-        </div>
+        </>
     );
 };
 
 const Header: React.FC<Props> = ({ children, infoBtnOnClick }: Props) => {
     return (
-        <HeaderContainer>
-            <Title infoBtnOnClick={infoBtnOnClick} />
+        <>
+            <HeaderContainer>
+                <Title infoBtnOnClick={infoBtnOnClick} />
 
-            {children}
-        </HeaderContainer>
+                {children}
+            </HeaderContainer>
+        </>
     );
 };
 

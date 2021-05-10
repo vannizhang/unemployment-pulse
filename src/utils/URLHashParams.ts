@@ -1,4 +1,5 @@
 import { urlFns } from 'helper-toolkit-ts';
+import { url } from 'node:inspector';
 
 type UrlHashParamKey = '@' | 'fips';
 
@@ -58,4 +59,12 @@ export const updateFIPSInURLHashParams = (FIPS?: string) => {
         key,
         value: FIPS || '',
     });
+};
+
+export const getFIPSFromURLHashParams = (FIPS?: string) => {
+    const key: UrlHashParamKey = 'fips';
+
+    const hashParams = urlFns.parseHash();
+
+    return hashParams[key] || '';
 };

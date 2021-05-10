@@ -6,10 +6,10 @@ import IGraphic from 'esri/Graphic';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import ISimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 import IPolygon from 'esri/geometry/Polygon';
-import {
-    SPARKLINE_COLOR_ORANGE,
-    THEME_COLOR_ORANGE,
-} from '../../constants/style';
+// import {
+//     SPARKLINE_COLOR_ORANGE,
+//     THEME_COLOR_ORANGE,
+// } from '../../constants/style';
 // import IPoint from 'esri/geometry/Point';
 // import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 // import IwatchUtils from 'esri/core/watchUtils';

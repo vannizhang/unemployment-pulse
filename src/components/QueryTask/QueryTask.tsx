@@ -6,7 +6,7 @@ import IMapView from 'esri/views/MapView';
 import IFeatureLayer from 'esri/layers/FeatureLayer';
 // import IPoint from 'esri/geometry/Point';
 import IGraphic from 'esri/Graphic';
-import IFeatureLayerView from 'esri/views/layers/FeatureLayerView';
+// import IFeatureLayerView from 'esri/views/layers/FeatureLayerView';
 
 type Props = {
     url: string;
@@ -18,6 +18,7 @@ type Props = {
         max: number;
     };
     FIPS?: string;
+    selectedFeature?: IGraphic;
     // onStart?: ()=>void;
     onSelect: (feature: IGraphic) => void;
     // pointerOnMove: (position: TooltipPosition) => void;
@@ -31,6 +32,7 @@ const QueryTaskLayer: React.FC<Props> = ({
     mapView,
     visibleScale,
     FIPS,
+    selectedFeature,
     // onStart,
     onSelect,
     // pointerOnMove,
@@ -116,20 +118,22 @@ const QueryTaskLayer: React.FC<Props> = ({
         const isVisible = isLayerInVisibleRange();
 
         if (isVisible || where) {
-            where = where || '1=1';
+            // where = where || '1=1';
 
             const geometry = event ? mapView.toMap(event) : null;
 
             const results = await layerRef.current.queryFeatures({
-                where,
+                where: where || '1=1',
                 geometry,
                 returnGeometry: true,
                 outFields: outFields || ['*'],
             });
 
-            // if (where && !geometry) {
-            //     mapView.goTo(results.features[0].geometry);
-            // }
+            // console.log(where, geometry)
+
+            if (where && !geometry) {
+                mapView.goTo(results.features[0].geometry);
+            }
 
             if (results.features && results.features.length) {
                 onSelect(results.features[0]);
@@ -151,6 +155,18 @@ const QueryTaskLayer: React.FC<Props> = ({
 
     useEffect(() => {
         if (layerRef.current && FIPS) {
+            const fieldName4FIPS = outFields[0];
+
+            // let's say user clicks on the map to query a county/starte,
+            // this function will be called because the FIPS is also updated,
+            // and we only want to call queryFeatureByFIPS if FIPS is not same to the FIPS of selected feature
+            if (
+                selectedFeature &&
+                selectedFeature.attributes[fieldName4FIPS] === FIPS
+            ) {
+                return;
+            }
+
             queryFeatureByFIPS();
         }
     }, [FIPS]);

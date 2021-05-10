@@ -126,6 +126,7 @@ const AppLayout = () => {
                             ? FIPS4SelectedFeature
                             : null
                     }
+                    selectedFeature={selectedFeature}
                     onSelect={setSelectedFeature}
                 />
 
@@ -140,6 +141,7 @@ const AppLayout = () => {
                             ? FIPS4SelectedFeature
                             : null
                     }
+                    selectedFeature={selectedFeature}
                     onSelect={setSelectedFeature}
                 />
 

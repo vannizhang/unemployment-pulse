@@ -16,6 +16,7 @@ import { ThemeText } from '../InfoPanel/InfoText';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 type Props = {
+    bottomPosition?: number;
     onSelect: (data: PlaceData) => void;
 };
 
@@ -23,18 +24,34 @@ type AutocompleteItemProps = {
     isCandidate?: boolean;
 };
 
+const BACKGROUND_COLOR = 'rgba(19, 106, 164, .5)';
+const BACKGROUND_COLOR_HOVER = 'rgba(19, 106, 164, .55)';
+const BORDER_COLOR = '#136AA4';
+
+const AutocompleteWarp = styled.div`
+    border-top: 1px solid ${BORDER_COLOR};
+`;
+
 const AutocompleteItem = styled.div<AutocompleteItemProps>`
     color: ${THEME_COLOR_ORANGE};
     background-color: ${(props) =>
-        props.isCandidate
-            ? AUTOCOMPLETE_LIGHT_BACKGROUND
-            : AUTOCOMPLETE_BACKGROUND};
+        props.isCandidate ? BACKGROUND_COLOR_HOVER : BACKGROUND_COLOR};
+    border-bottom: 1px solid ${BORDER_COLOR};
     padding: 0.35rem 0.5rem;
     cursor: pointer;
 `;
 
 const AutocompleteInput = styled.input`
     width: 270px;
+    background-color: ${BACKGROUND_COLOR};
+    border: 1px solid ${BORDER_COLOR};
+    color: ${THEME_COLOR_ORANGE};
+
+    ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: ${THEME_COLOR_ORANGE};
+        opacity: 0.75; /* Firefox */
+    }
 `;
 
 const trie = new Trie();
@@ -59,7 +76,10 @@ const populateTrie = (source: UnempolymentDataByFIPS) => {
     trie.hasPopulated = true;
 };
 
-const PlaceAutocomplete: React.FC<Props> = ({ onSelect }: Props) => {
+const PlaceAutocomplete: React.FC<Props> = ({
+    bottomPosition,
+    onSelect,
+}: Props) => {
     const containerRef = useRef<HTMLDivElement>();
 
     const [searchTerm, setSearchTerm] = useState<string>();
@@ -125,7 +145,7 @@ const PlaceAutocomplete: React.FC<Props> = ({ onSelect }: Props) => {
             );
         });
 
-        return <div>{list}</div>;
+        return <AutocompleteWarp>{list}</AutocompleteWarp>;
     };
 
     // close autocomplete list if clicks outside of the container
@@ -156,18 +176,26 @@ const PlaceAutocomplete: React.FC<Props> = ({ onSelect }: Props) => {
     }, [searchTerm]);
 
     return (
-        <div ref={containerRef}>
-            {getAutocompleteList()}
+        <div
+            style={{
+                position: 'absolute',
+                bottom: bottomPosition ? bottomPosition : '2rem',
+                left: '1rem',
+            }}
+        >
+            <div ref={containerRef}>
+                {getAutocompleteList()}
 
-            <AutocompleteInput
-                type="text"
-                autoComplete="off"
-                placeholder="Search State or County"
-                value={searchTerm || ''}
-                spellCheck={false}
-                onChange={searchInputOnChange}
-                onKeyDown={searchInputOnKeyDown}
-            ></AutocompleteInput>
+                <AutocompleteInput
+                    type="text"
+                    autoComplete="off"
+                    placeholder="Search State or County"
+                    value={searchTerm || ''}
+                    spellCheck={false}
+                    onChange={searchInputOnChange}
+                    onKeyDown={searchInputOnKeyDown}
+                ></AutocompleteInput>
+            </div>
         </div>
     );
 };

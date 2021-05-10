@@ -13,6 +13,8 @@ import {
     PlaceAutoComplete,
 } from '../';
 
+import { INFO_PANEL_HEIGHT } from '../InfoPanel/InfoPanel';
+
 import {
     URL_US_COUNTIES_GENERALIZED,
     URL_US_STATES_GENERALIZED,
@@ -153,20 +155,15 @@ const AppLayout = () => {
                 }}
             />
 
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: '2rem',
-                    left: '1rem',
+            <PlaceAutoComplete
+                bottomPosition={
+                    unemploymentData4SelectedFeature ? INFO_PANEL_HEIGHT : 0
+                }
+                onSelect={(placeData) => {
+                    // console.log(placeData);
+                    setFIPS4SelectedFeature(placeData.fips);
                 }}
-            >
-                <PlaceAutoComplete
-                    onSelect={(placeData) => {
-                        // console.log(placeData);
-                        setFIPS4SelectedFeature(placeData.fips);
-                    }}
-                />
-            </div>
+            />
         </>
     );
 };

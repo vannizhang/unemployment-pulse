@@ -127,12 +127,12 @@ const QueryTaskLayer: React.FC<Props> = ({
                 outFields: outFields || ['*'],
             });
 
+            // if (where && !geometry) {
+            //     mapView.goTo(results.features[0].geometry);
+            // }
+
             if (results.features && results.features.length) {
                 onSelect(results.features[0]);
-            }
-
-            if (where) {
-                mapView.goTo(results.features[0].geometry);
             }
         }
     };

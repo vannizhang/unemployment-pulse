@@ -13,12 +13,14 @@ import {
     BREAKPOINT_SMALL,
 } from '../../constants/style';
 
+export const INFO_PANEL_HEIGHT = 250;
+
 const InfoPanelContainer = styled.div`
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 250px;
+    height: ${INFO_PANEL_HEIGHT}px;
     display: flex;
     box-sizing: border-box;
     background: linear-gradient(

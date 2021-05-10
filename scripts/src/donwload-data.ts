@@ -63,7 +63,7 @@ const queryParams = {
     outFields
 }
 
-const QueryParams = `f=json&where=1=1&returnGeometry=false&returnCentroid=true&outSR=4326&outFields=${outFields}`;
+// const QueryParams = `f=json&where=1=1&returnGeometry=false&returnCentroid=true&outSR=4326&outFields=${outFields}`;
 
 // use this function to fetch data for all 50 states or the entire US
 export const fecthData4States = async(shouldFetchNationalAverage=false):Promise<MonthlyUmempolymentData>=>{
@@ -83,9 +83,22 @@ export const fecthData4States = async(shouldFetchNationalAverage=false):Promise<
 export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
     try {
 
-        const response4Counties1 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}`);
+        const where = `STATE <> 'Puerto Rico'`
 
-        const response4Counties2 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query?${QueryParams}&resultOffset=2000`);
+        const response4Counties1 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query`, {
+            params: {
+                ...queryParams,
+                where
+            }
+        });
+
+        const response4Counties2 = await axios.get<QueryResult>(`${UNEMPLOYMENT_SERVICE_URL}/${LAYER_ID_COUNTIES}/query`, {
+            params: {
+                ...queryParams,
+                where,
+                resultOffset: 2000,
+            }
+        });
 
         const features = [
             ...response4Counties1.data.features,

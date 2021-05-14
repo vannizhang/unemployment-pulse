@@ -1,7 +1,7 @@
 {
   "name": "unempolyment-pulse",
   "version": "1.0.0",
-  "description": "visualize latest 14 months of unemployment statistics from the U.S. Bureau of Labor Statistics.",
+  "description": "Track unemployment rates through time and compare local rates to each other.",
   "main": "index.js",
   "title": "UnemploymentPulse",
   "scripts": {
@@ -28,12 +28,12 @@
     "url": "git+https://github.com/vannizhang/unemployment-pulse.git"
   },
   "keywords": [],
-  "author": "Jinnan Zhang",
+  "author": "ArcGIS Living Atlas of the World",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vannizhang/unemployment-pulse/issues"
   },
-  "homepage": "https://github.com/vannizhang/unemployment-pulse",
+  "homepage": "https://livingatlas.arcgis.com/unemploymentpulse/",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",

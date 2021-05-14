@@ -91,7 +91,7 @@ module.exports =  (env, options)=> {
                 title: package.title,
                 meta: {
                     title: 'UnemploymentPulse',
-                    description: package.title,
+                    description: package.description,
                     author: package.author,
                     keywords: Array.isArray(package.keywords) 
                         ? package.keywords.join(',') 
@@ -99,6 +99,7 @@ module.exports =  (env, options)=> {
                     'og:title': package.title,
                     'og:description': package.description,
                     'og:url': package.homepage,
+                    'og:image': package.homepage + '/public/thumbnail.jpg',
                 },
                 minify: {
                     html5                          : true,

@@ -64,14 +64,18 @@ type STATS_DATA = {
 const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
     const { months, isMobileDevice } = useContext<AppContextValue>(AppContext);
 
-    const [lastMonth, lastYear, lowest, highest] = useMemo(() => {
+    const [currMonth, lastMonth, lastYear, lowest, highest] = useMemo(() => {
         return getStatistics(data, months);
     }, [data]);
+
+    // const currMonth = useMemo(() => {
+    //     return months[months.length - 1]
+    // }, [months]);
 
     return (
         <UnemploymentInfoContainer>
             <div>
-                <ThemeText>Unemployment Rate</ThemeText>
+                <ThemeText>Unemployment Rate ({currMonth.month})</ThemeText>
             </div>
 
             <div
@@ -108,7 +112,7 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
 
                 <div
                     style={{
-                        maxWidth: 170,
+                        maxWidth: 240,
                     }}
                 >
                     <div
@@ -128,13 +132,14 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                     >
                         <ThemeText customLineHeight="1">
                             Ranks #
-                            {numberFns.numberWithCommas(data.attributes.rank)}
+                            {numberFns.numberWithCommas(data.attributes.rank)}{' '}
+                            in Unemployment
                         </ThemeText>
                         <br />
                         <ThemeText customLineHeight="1">
                             {data.attributes.fips.length === 2
                                 ? 'of 50 States and DC'
-                                : 'of 3,141 Counties'}
+                                : 'of 3,141 Counties Nationally'}
                         </ThemeText>
                     </div>
                 </div>
@@ -179,6 +184,8 @@ const getStatistics = (
 ): STATS_DATA[] => {
     const { PctUnemployed } = data;
 
+    const idx4currMonth = PctUnemployed.length - 1;
+
     const idx4lastMonth = PctUnemployed.length - 2;
     // last year this month
     const idx4LastYear = PctUnemployed.length - 13;
@@ -198,6 +205,7 @@ const getStatistics = (
     }
 
     return [
+        idx4currMonth,
         idx4lastMonth,
         idx4LastYear,
         index4LowesetMonth,

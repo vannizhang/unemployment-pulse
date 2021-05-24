@@ -11,6 +11,7 @@ import {
     Header,
     About,
     PlaceAutoComplete,
+    Ranking,
 } from '../';
 
 import { INFO_PANEL_HEIGHT } from '../InfoPanel/InfoPanel';
@@ -61,6 +62,8 @@ const AppLayout = () => {
 
     const [showAbout, setShowAbout] = useState<boolean>(false);
 
+    const [showRanking, setShowRanking] = useState<boolean>(false);
+
     const [FIPS4SelectedFeature, setFIPS4SelectedFeature] = useState<string>(
         defaultFIPS
     );
@@ -88,6 +91,11 @@ const AppLayout = () => {
             <About
                 isActive={showAbout}
                 onClose={setShowAbout.bind(this, false)}
+            />
+
+            <Ranking
+                isActive={showRanking}
+                onClose={setShowRanking.bind(this, false)}
             />
 
             <Header infoBtnOnClick={setShowAbout.bind(this, true)}>
@@ -151,6 +159,7 @@ const AppLayout = () => {
 
             <InfoPanel
                 data={unemploymentData4SelectedFeature}
+                showRankingOnClick={setShowRanking.bind(this, true)}
                 close={() => {
                     setSelectedFeature(null);
                     setUnemploymentData4SelectedFeature(null);

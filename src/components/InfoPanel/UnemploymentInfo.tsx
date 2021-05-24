@@ -53,6 +53,7 @@ const InfoTextWrap = styled.div`
 
 type Props = {
     data: UnempolymentData;
+    showRankingOnClick: () => void;
     // layout: InfoPanelLayout
 };
 
@@ -61,7 +62,10 @@ type STATS_DATA = {
     value: number;
 };
 
-const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
+const UnemploymentInfo: React.FC<Props> = ({
+    data,
+    showRankingOnClick,
+}: Props) => {
     const { months, isMobileDevice } = useContext<AppContextValue>(AppContext);
 
     const [currMonth, lastMonth, lastYear, lowest, highest] = useMemo(() => {
@@ -131,8 +135,13 @@ const UnemploymentInfo: React.FC<Props> = ({ data }: Props) => {
                         }}
                     >
                         <ThemeText customLineHeight="1">
-                            Ranks #
-                            {numberFns.numberWithCommas(data.attributes.rank)}{' '}
+                            <a
+                                href="JavaScript:void(0);"
+                                onClick={showRankingOnClick}
+                            >
+                                Ranks
+                            </a>{' '}
+                            #{numberFns.numberWithCommas(data.attributes.rank)}{' '}
                             in Unemployment
                         </ThemeText>
                         <br />

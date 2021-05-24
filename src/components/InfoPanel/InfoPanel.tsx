@@ -58,15 +58,23 @@ const CloseBtnDiv = styled.div`
 
 type Props = {
     data: UnempolymentData;
+    showRankingOnClick: () => void;
     close: () => void;
     // layout: InfoPanelLayout
 };
 
-const InfoPanel: React.FC<Props> = ({ data, close }: Props) => {
+const InfoPanel: React.FC<Props> = ({
+    data,
+    close,
+    showRankingOnClick,
+}: Props) => {
     return data ? (
         <InfoPanelContainer className="animate-fade-in">
             <SummaryInfo data={data} />
-            <UnemploymentInfo data={data} />
+            <UnemploymentInfo
+                showRankingOnClick={showRankingOnClick}
+                data={data}
+            />
             <Chart data={data} />
 
             <CloseBtnDiv onClick={close}>

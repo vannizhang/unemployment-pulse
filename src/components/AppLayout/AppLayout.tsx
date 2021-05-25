@@ -96,6 +96,10 @@ const AppLayout = () => {
             <Ranking
                 isActive={showRanking}
                 onClose={setShowRanking.bind(this, false)}
+                onSelect={(fips) => {
+                    setFIPS4SelectedFeature(fips);
+                    setShowRanking(false);
+                }}
             />
 
             <Header infoBtnOnClick={setShowAbout.bind(this, true)}>

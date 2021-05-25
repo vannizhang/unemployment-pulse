@@ -6,9 +6,14 @@ import { UnempolymentData } from '../../../shared/types';
 type Props = {
     rankingData: RankingData;
     label: string;
+    onClick: (fips: string) => void;
 };
 
-const RankingList: React.FC<Props> = ({ rankingData, label }: Props) => {
+const RankingList: React.FC<Props> = ({
+    rankingData,
+    label,
+    onClick,
+}: Props) => {
     const getList = (data: UnempolymentData[]) => {
         const list = data.map((d) => {
             return (
@@ -17,7 +22,9 @@ const RankingList: React.FC<Props> = ({ rankingData, label }: Props) => {
                     style={{
                         display: 'flex',
                         justifyContent: 'space-between',
+                        cursor: 'pointer',
                     }}
+                    onClick={onClick.bind(this, d.attributes.fips)}
                 >
                     <ThemeText color="blue" size="small">
                         {d.attributes.name}

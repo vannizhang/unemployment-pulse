@@ -138,6 +138,9 @@ const UnemploymentInfo: React.FC<Props> = ({
                             <a
                                 href="JavaScript:void(0);"
                                 onClick={showRankingOnClick}
+                                style={{
+                                    textDecoration: 'underline',
+                                }}
                             >
                                 Ranks
                             </a>{' '}

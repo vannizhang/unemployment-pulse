@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { Modal } from '../';
-import { Props } from '../Modal/Modal';
+import { Props as ModalProps } from '../Modal/Modal';
 import RankingList from './RankingList';
 
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
@@ -38,7 +38,11 @@ const getRankingData = (
     };
 };
 
-const Ranking: React.FC<Props> = ({ isActive, onClose }: Props) => {
+type Props = ModalProps & {
+    onSelect: (fips: string) => void;
+};
+
+const Ranking: React.FC<Props> = ({ isActive, onClose, onSelect }: Props) => {
     const { unemploymentDataByFIPS } = useContext<AppContextValue>(AppContext);
 
     const rankingData4States = useMemo(() => {
@@ -79,11 +83,13 @@ const Ranking: React.FC<Props> = ({ isActive, onClose }: Props) => {
                 <RankingList
                     rankingData={rankingData4States}
                     label="50 States and DC"
+                    onClick={onSelect}
                 />
 
                 <RankingList
                     rankingData={rankingData4Counties}
                     label="3,141 Counties"
+                    onClick={onSelect}
                 />
             </div>
         );

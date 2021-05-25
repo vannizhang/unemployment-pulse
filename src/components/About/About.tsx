@@ -1,6 +1,6 @@
 import React from 'react';
-// import styled from 'styled-components';
-// import { THEME_COLOR_BLUE } from '../../constants/style';
+import styled from 'styled-components';
+import { THEME_COLOR_ORANGE } from '../../constants/style';
 import { Modal } from '../';
 import { Props } from '../Modal/Modal';
 
@@ -9,18 +9,31 @@ import { Props } from '../Modal/Modal';
 //     onClose: () => void;
 // };
 
+const AboutContent = styled.div`
+    a {
+        color: ${THEME_COLOR_ORANGE};
+    }
+`;
+
 const About: React.FC<Props> = ({ isActive, onClose }: Props) => {
     return (
         <Modal isActive={isActive} onClose={onClose}>
-            <div>
+            <AboutContent>
                 <p>
                     <span className="text-theme-color-orange">
                         UnemploymentPulse
                     </span>{' '}
                     visualizes a moving 14-month window of unemployment data at
-                    the state and county level, as reported by the Bureau of
-                    Labor and Statistics. Local rates are shown alongside
-                    national rate.
+                    the state and county level, as reported by the{' '}
+                    <a
+                        href="https://www.bls.gov/cps/definitions.htm#lfconcepts"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Bureau of Labor and Statistics
+                    </a>{' '}
+                    (monthly report, generally released with about a six-week
+                    lag). Local rates are shown alongside national rates.
                 </p>
 
                 <p>
@@ -28,6 +41,55 @@ const About: React.FC<Props> = ({ isActive, onClose }: Props) => {
                     first shows local rates of unemployment alongside national
                     rates, for context. The second option shows when local rates
                     went above or below the national rate.
+                </p>
+
+                <p>
+                    <span>
+                        <a
+                            href="https://www.bls.gov/cps/definitions.htm#unemployed"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Unemployed
+                        </a>
+                        : Those who have actively looked for work during the
+                        past four weeks, and are available to start work
+                        (includes new graduates and other recent entrants into
+                        the labor force, those with informal jobs, those on
+                        temporary layoff/furlough).
+                    </span>
+                    <br />
+                    <span>
+                        <a
+                            href="https://www.bls.gov/cps/definitions.htm#laborforce"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Labor Force
+                        </a>
+                        : All people age 16 and older who are either employed or
+                        unemployed (either working or actively looking for
+                        work).
+                    </span>
+                    <br />
+                    <span>
+                        <a
+                            href="https://www.bls.gov/cps/definitions.htm#lfpr"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Participation Rate
+                        </a>
+                        : The ratio of the Labor Force to the working-age
+                        population (16+).
+                    </span>
+                </p>
+
+                <p>
+                    Unemployment descriptive ranges are sourced from the Bureau
+                    of Labor and Statistics (less than 4% = economic boom; 4-6%
+                    = healthy and unlikely to cause inflation; more than 6% =
+                    recession-level unemployment likely to cause deflation).
                 </p>
 
                 <p>
@@ -67,7 +129,7 @@ const About: React.FC<Props> = ({ isActive, onClose }: Props) => {
                     </a>
                     .
                 </p>
-            </div>
+            </AboutContent>
         </Modal>
     );
 };

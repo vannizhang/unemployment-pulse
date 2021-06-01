@@ -22,12 +22,12 @@ const SummaryInfoContainer = styled.div`
 `;
 
 const SummaryInfo: React.FC<Props> = ({ data }: Props) => {
-    const participationRate = useMemo(() => {
-        return Math.floor(
+    const employmentRate = useMemo(() => {
+        return (
             ((data.attributes.workforce - data.attributes.unemployed) /
                 data.attributes.workforce) *
-                100
-        );
+            100
+        ).toFixed(1);
     }, [data]);
 
     return (
@@ -88,8 +88,8 @@ const SummaryInfo: React.FC<Props> = ({ data }: Props) => {
                     />
 
                     <InfoText
-                        title="Participation Rate"
-                        value={`${participationRate}%`}
+                        title="Employment Rate"
+                        value={`${employmentRate}%`}
                     />
                 </div>
 

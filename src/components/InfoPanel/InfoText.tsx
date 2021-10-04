@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import classnames from 'classnames';
 // import styled from 'styled-components';
 
-import { THEME_COLOR_ORANGE, THEME_COLOR_BLUE } from '../../constants/style';
-import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
-import { FontSize } from 'components/Atoms/CalciteElements/typing';
+// import { THEME_COLOR_ORANGE, THEME_COLOR_BLUE } from '../../constants/style';
+// import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+// import { FontSize } from 'components/Atoms/CalciteElements/typing';
 
 type Props = {
     value: string;

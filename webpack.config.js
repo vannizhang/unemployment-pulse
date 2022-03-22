@@ -13,6 +13,7 @@ module.exports =  (env, options)=> {
     const devMode = options.mode === 'development' ? true : false;
 
     return {
+        mode: options.mode,
         entry: path.resolve(__dirname, './src/index.tsx'),
         output: {
             path: path.resolve(__dirname, './dist'),

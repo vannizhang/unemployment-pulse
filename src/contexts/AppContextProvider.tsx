@@ -37,7 +37,11 @@ const fetchDataFromPublicFolder = async <T extends unknown>(
     const PUBLIC_PATH = './public';
 
     try {
-        const { data } = await axios.get<T>(`${PUBLIC_PATH}/${filename}`);
+        const { data } = await axios.get<T>(`${PUBLIC_PATH}/${filename}`, {
+            headers: {
+                'Cache-Control': 'no-cache',
+            },
+        });
         return data;
     } catch (err) {
         console.error(err);

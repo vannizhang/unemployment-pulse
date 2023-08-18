@@ -2,21 +2,34 @@ import React, { useContext, useMemo } from 'react';
 import { UnempolymentData } from '../../../shared/types';
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
-import { BarLineCombined } from '../QuickD3Chart';
-
-import { QuickD3ChartData, QuickD3ChartDataItem } from '../QuickD3Chart/types';
+// import { BarLineCombined } from '../QuickD3Chart';
+import { BarLineComboChart } from '@vannizhang/react-d3-charts'
 import { ThemeText } from './InfoText';
+import { AXIS_LINE_COLOR, AXIS_TEXT_COLOR, BAR_COLOR, LINE_COLOR, LINE_WIDTH, TOOLTIP_BACKGROUND_COLOR } from '../QuickD3Chart/constants';
+import { BarLineComboChartDataItem } from '@vannizhang/react-d3-charts/dist/BarLineComboChart/types';
 
 type Props = {
     data: UnempolymentData;
 };
 
-const getChartData = (values: number[], months: string[]) => {
+const getChartData = (values: number[], valueNationAve:number[]) => {
+
+    console.log(values)
+    console.log(valueNationAve)
+
     return values.map((value, index) => {
         return {
-            key: index,
-            value,
-        };
+            x: index,
+            yBar: value,
+            yLine: valueNationAve[index],
+            tooltip: `
+                <div>
+                    <span class="text-theme-color-orange">Local: ${value}</span>
+                    <br />
+                    <span class="text-theme-color-blue">National: ${valueNationAve[index]}</span>
+                <div>
+            `
+        } as BarLineComboChartDataItem;
     });
 };
 
@@ -25,23 +38,25 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
         AppContext
     );
 
-    const data4Line: QuickD3ChartData = useMemo(() => {
+    const chartData = useMemo(() => {
         const USData = unemploymentDataByFIPS['0'];
-        const { PctUnemployed } = USData;
-        return getChartData(PctUnemployed, months);
-    }, [unemploymentDataByFIPS]);
-
-    const data4Bars: QuickD3ChartData = useMemo(() => {
         const { PctUnemployed } = data;
-        return getChartData(PctUnemployed, months);
-    }, [data]);
+        const output = getChartData(PctUnemployed, USData.PctUnemployed);
+        console.log(output)
+
+        return output
+    }, [unemploymentDataByFIPS]);
 
     return (
         <div
             style={{
                 position: 'relative',
                 flexGrow: 1,
-            }}
+                '--axis-tick-line-color': AXIS_LINE_COLOR,
+                '--axis-tick-text-color': AXIS_TEXT_COLOR,
+                '--tooltip-background-color': TOOLTIP_BACKGROUND_COLOR,
+                '--tooltip-text-font-size': '.8rem'
+            } as React.CSSProperties}
         >
             <div
                 className="text-right"
@@ -60,10 +75,29 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 </ThemeText>
                 <br />
                 <ThemeText color="blue">
-                    {data4Line ? data4Line[data4Line.length - 1].value : ''}%
+                    {chartData ? chartData[chartData.length - 1].yLine : ''}%
                 </ThemeText>
             </div>
-            <BarLineCombined data4Bars={data4Bars} data4Line={data4Line} />
+
+            <BarLineComboChart 
+                data={chartData}
+                fill={BAR_COLOR}
+                strokeColor={LINE_COLOR}
+                strokeWidth={LINE_WIDTH}
+                innerPadding={0.8}
+                showTooltip={true}
+                bottomAxisOptions={{
+                    // tickFormatFunction: (val: number | string) => {
+
+                    //     if(typeof val === 'number'){
+                    //         val = val.toString();
+                    //     }
+                
+                    //     const [month, day] = val.split('/');
+                    //     return `${month}-${day}`;
+                    // }
+                }}
+            />
         </div>
     );
 };

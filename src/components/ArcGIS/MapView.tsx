@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { loadModules, loadCss } from 'esri-loader';
+import { loadModules, loadCss, setDefaultOptions } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import IWebMap from 'esri/WebMap';
 import IwatchUtils from 'esri/core/watchUtils';
@@ -12,6 +12,8 @@ import {
 } from '../../utils/URLHashParams';
 
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
+
+setDefaultOptions({ version: '4.18'})
 
 interface Props {
     webmapId: string;

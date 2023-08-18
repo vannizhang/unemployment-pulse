@@ -38,7 +38,7 @@ const SparklineLayer: React.FC<Props> = ({
     visibleScale,
     mapView,
 }) => {
-    const renderDealy = useRef<number>();
+    const renderDealy = useRef<NodeJS.Timeout>();
 
     const layerRef = useRef<IGraphicsLayer>();
 
@@ -165,7 +165,7 @@ const SparklineLayer: React.FC<Props> = ({
                                                                 'CIMSolidStroke',
                                                             width: STROKE_WIDTH,
                                                             color,
-                                                        },
+                                                        } as any,
                                                     ],
                                                 },
                                             },

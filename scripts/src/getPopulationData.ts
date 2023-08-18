@@ -1,6 +1,6 @@
 // ArcGIS REST JS is supported in Node.js 8.x and above. It requires additional packages to polyfill Fetch and FormData.
-require('isomorphic-form-data');
-const fetch = require('node-fetch');
+// require('isomorphic-form-data');
+// const fetch = require('node-fetch');
 import { IQueryFeaturesResponse, queryFeatures } from '@esri/arcgis-rest-feature-layer';
 import { setDefaultRequestOptions } from '@esri/arcgis-rest-request';
 import {
@@ -8,7 +8,7 @@ import {
 } from './getStateAbbrev';
 
 // use node-fetch for each request instead of relying on a global
-setDefaultRequestOptions({ fetch })
+// setDefaultRequestOptions({ fetch })
 
 type PopulationLookup = {
     [fips:string]: {

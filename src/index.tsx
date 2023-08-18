@@ -1,7 +1,7 @@
 import './styles/index.css';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 // import { Provider as ReduxProvider } from 'react-redux';
 // import configureAppStore, { getPreloadedState } from './store/configureStore';
 
@@ -11,13 +11,11 @@ import { RootPage } from './pages';
 
 (async () => {
     // const preloadedState = getPreloadedState();
+    const root = createRoot(document.getElementById('root'));
 
-    ReactDOM.render(
-        <React.StrictMode>
-            <AppContextProvider>
-                <RootPage />
-            </AppContextProvider>
-        </React.StrictMode>,
-        document.getElementById('root')
+    root.render(
+        <AppContextProvider>
+            <RootPage />
+        </AppContextProvider>
     );
 })();

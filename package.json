@@ -75,8 +75,7 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
-    "@esri/arcgis-rest-feature-layer": "^3.0.5",
-    "@esri/arcgis-rest-request": "^3.0.0",
+    "@esri/arcgis-rest-feature-service": "^4.0.4",
     "@reduxjs/toolkit": "1.8",
     "@types/arcgis-js-api": "^4.23.1",
     "@types/d3": "^7.4.0",

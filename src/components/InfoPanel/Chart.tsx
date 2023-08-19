@@ -14,21 +14,20 @@ type Props = {
 
 const getChartData = (values: number[], valueNationAve:number[]) => {
 
-    console.log(values)
-    console.log(valueNationAve)
-
     return values.map((value, index) => {
+        const tooltip = [
+            `<div>`,
+                `<span class="text-theme-color-orange">Local: ${value}</span>`,
+                '<br />',
+                `<span class="text-theme-color-blue">National: ${valueNationAve[index]}</span>`,
+            `<div>`,
+        ].join('')
+
         return {
             x: index,
             yBar: value,
             yLine: valueNationAve[index],
-            tooltip: `
-                <div>
-                    <span class="text-theme-color-orange">Local: ${value}</span>
-                    <br />
-                    <span class="text-theme-color-blue">National: ${valueNationAve[index]}</span>
-                <div>
-            `
+            tooltip
         } as BarLineComboChartDataItem;
     });
 };
@@ -42,10 +41,8 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
         const USData = unemploymentDataByFIPS['0'];
         const { PctUnemployed } = data;
         const output = getChartData(PctUnemployed, USData.PctUnemployed);
-        console.log(output)
-
         return output
-    }, [unemploymentDataByFIPS]);
+    }, [unemploymentDataByFIPS, data]);
 
     return (
         <div
@@ -58,12 +55,16 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 '--tooltip-text-font-size': '.8rem'
             } as React.CSSProperties}
         >
-            <div
+            {/* <div
                 className="text-right"
                 style={{
                     position: 'absolute',
                     top: '.75rem',
                     right: '1rem',
+                    padding: '.25rem',
+                    pointerEvents: 'none',
+                    zIndex: 5,
+                    background: 'rgba(3,26,57, .4)',
                 }}
             >
                 <ThemeText color="orange" size="small">
@@ -77,7 +78,7 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 <ThemeText color="blue">
                     {chartData ? chartData[chartData.length - 1].yLine : ''}%
                 </ThemeText>
-            </div>
+            </div> */}
 
             <BarLineComboChart 
                 data={chartData}
@@ -87,15 +88,13 @@ const Chart: React.FC<Props> = ({ data }: Props) => {
                 innerPadding={0.8}
                 showTooltip={true}
                 bottomAxisOptions={{
-                    // tickFormatFunction: (val: number | string) => {
+                    tickFormatFunction: (val: number | string) => {
 
-                    //     if(typeof val === 'number'){
-                    //         val = val.toString();
-                    //     }
-                
-                    //     const [month, day] = val.split('/');
-                    //     return `${month}-${day}`;
-                    // }
+                        const [month, year] = months[val].split(' ');
+                        const abbreviation = month.slice(0, 3);
+                        const formated = abbreviation === 'Jan' ? year : abbreviation;
+                        return formated;
+                    }
                 }}
             />
         </div>

@@ -14,6 +14,7 @@ import {
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 setDefaultOptions({ version: '4.18'})
+loadCss();
 
 interface Props {
     webmapId: string;
@@ -105,7 +106,6 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
     };
 
     React.useEffect(() => {
-        loadCss();
         initMapView();
     }, []);
 

@@ -105,7 +105,7 @@ export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
             ...response4Counties2.data.features
         ];
 
-        return processQueryResult(features)
+        return processQueryResult(features, true)
 
     } catch(err){
         console.error(err)
@@ -114,13 +114,25 @@ export const fetchData4Counties = async():Promise<MonthlyUmempolymentData>=>{
     return null;
 }
 
-const processQueryResult = (features:MonthlyUnemploymentFeature[]):MonthlyUmempolymentData=>{
+const processQueryResult = (features:MonthlyUnemploymentFeature[], shouldExlcudeFeaturesNotFoundInACS=false):MonthlyUmempolymentData=>{
 
     if(!features || !features.length){
         return;
     }
 
     let maxPctUnemployed = 0;
+
+    if(shouldExlcudeFeaturesNotFoundInACS){
+        features = features.filter(feature=>{
+            const {
+                attributes,
+            } = feature;
+    
+            const { fips } = attributes;
+    
+            return populationLookup[fips] !== undefined
+        })
+    }
 
     const pctUnemployedSorted = features
         .map(feature=>{

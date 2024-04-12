@@ -10,6 +10,7 @@ import {
     UNEMPLOYMENT_PATHS_STATES_FILE_NAME,
     // UNEMPLOYMENT_US_FILE_NAME,
     UNEMPLOYMENT_PATHS_US_FILE_NAME,
+    UNEMPLOYMENT_PATHS_US_WITH_COUNTIES_FILE_NAME,
     UNEMPLOYMENT_DATA_FILE_NAME
 } from '../constants'
 
@@ -20,6 +21,7 @@ const OUTPUT_JSON_US_COUNTIES_PATHS = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT
 const OUTPUT_JSON_US_STATES_PATHS = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_PATHS_STATES_FILE_NAME);
 // const OUTPUT_JSON_US = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_US_FILE_NAME);
 const OUTPUT_JSON_US_PATHS = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_PATHS_US_FILE_NAME);
+const OUTPUT_JSON_US_PATHS_COUNTIES = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_PATHS_US_WITH_COUNTIES_FILE_NAME);
 const OUTPUT_JSON_UNEMPLOYMENT = path.join(PUBLIC_FOLDER_PATH, UNEMPLOYMENT_DATA_FILE_NAME);
 
 // export const saveCountiesData = (data:MonthlyUmempolymentData)=>{
@@ -42,8 +44,12 @@ export const savePathsData4Counties = (data:MonthlyUmempolymentDataPaths)=>{
     writeToJson(data, OUTPUT_JSON_US_COUNTIES_PATHS);
 };
 
-export const savePathsData4US = (data:MonthlyUmempolymentDataPaths)=>{
+export const savePathsData4NationalWithStates = (data:MonthlyUmempolymentDataPaths)=>{
     writeToJson(data, OUTPUT_JSON_US_PATHS);
+};
+
+export const savePathsData4NationalWithCounties = (data:MonthlyUmempolymentDataPaths)=>{
+    writeToJson(data, OUTPUT_JSON_US_PATHS_COUNTIES);
 };
 
 export const saveUnempolymentDataByFIPS = (data:UnempolymentDataByFIPS)=>{

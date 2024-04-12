@@ -11,6 +11,7 @@ import {
     UNEMPLOYMENT_PATHS_STATES_FILE_NAME,
     UNEMPLOYMENT_PATHS_US_FILE_NAME,
     UNEMPLOYMENT_DATA_FILE_NAME,
+    UNEMPLOYMENT_PATHS_US_WITH_COUNTIES_FILE_NAME
 } from '../../shared/constants';
 import { queryMonths } from '../services/monthly-unemployment-data';
 
@@ -18,6 +19,7 @@ import { miscFns } from 'helper-toolkit-ts';
 
 export type AppContextValue = {
     unemploymentDataPathsUS: MonthlyUmempolymentDataPaths;
+    unemploymentDataPathsUSWithCounties: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsStates: MonthlyUmempolymentDataPaths;
     unemploymentDataPathsCounties: MonthlyUmempolymentDataPaths;
     unemploymentDataByFIPS: UnempolymentDataByFIPS;
@@ -69,6 +71,10 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 MonthlyUmempolymentDataPaths
             >(UNEMPLOYMENT_PATHS_US_FILE_NAME);
 
+            const unemploymentDataPathsUSWithCounties = await fetchDataFromPublicFolder<
+                MonthlyUmempolymentDataPaths
+            >(UNEMPLOYMENT_PATHS_US_WITH_COUNTIES_FILE_NAME);
+
             const unemploymentDataByFIPS = await fetchDataFromPublicFolder<
                 UnempolymentDataByFIPS
             >(UNEMPLOYMENT_DATA_FILE_NAME);
@@ -79,6 +85,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
                 unemploymentDataPathsStates,
                 unemploymentDataPathsCounties,
                 unemploymentDataPathsUS,
+                unemploymentDataPathsUSWithCounties,
                 unemploymentDataByFIPS,
                 months,
                 isMobileDevice: miscFns.isMobileDevice(),

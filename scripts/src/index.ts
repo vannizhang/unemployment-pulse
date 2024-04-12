@@ -7,7 +7,8 @@ import {
 import {
     savePathsData4States,
     savePathsData4Counties,
-    savePathsData4US,
+    savePathsData4NationalWithCounties,
+    savePathsData4NationalWithStates,
     // saveUnempolymentDataByFIPS
 } from './utils/file';
 
@@ -51,8 +52,11 @@ const start = async()=>{
         const paths4Counties = convertUnemploymentDataToPaths(data4Counties);
         savePathsData4Counties(paths4Counties);
 
-        const paths4US = convertUnemploymentDataToPaths(data4US, data4States.maxPctUnemployed);
-        savePathsData4US(paths4US)
+        const pathsNationalWithStates = convertUnemploymentDataToPaths(data4US, data4States.maxPctUnemployed);
+        savePathsData4NationalWithStates(pathsNationalWithStates)
+
+        const pathsNationalWithCounties = convertUnemploymentDataToPaths(data4US, data4Counties.maxPctUnemployed);
+        savePathsData4NationalWithCounties(pathsNationalWithCounties)
 
     } catch(err){
         console.error(err);

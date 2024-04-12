@@ -46,6 +46,7 @@ const AppLayout = () => {
         unemploymentDataPathsStates,
         unemploymentDataPathsCounties,
         unemploymentDataPathsUS,
+        unemploymentDataPathsUSWithCounties,
         unemploymentDataByFIPS,
         isMobileDevice,
     } = useContext<AppContextValue>(AppContext);
@@ -121,7 +122,7 @@ const AppLayout = () => {
 
                 <SparklineLayer
                     showDeviation={showDeviation}
-                    nationalLevelData={unemploymentDataPathsUS}
+                    nationalLevelData={unemploymentDataPathsUSWithCounties}
                     data={unemploymentDataPathsCounties}
                     visibleScale={VISIBLE_SCALE_COUNTIES}
                     color={SPARKLINE_COLOR_ORANGE}

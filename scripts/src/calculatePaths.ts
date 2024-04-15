@@ -32,7 +32,10 @@ const calculatePath = ({
 
     const path = values.map((val, index)=>{
 
-        const x = +Math.round(xRatio * index).toFixed(0);
+        // const x = +Math.round(xRatio * index).toFixed(0);
+
+        const x = +(xRatio * index).toFixed(1);
+
         // const y = val <= ymax ? val : ymax;
         let y = yRatio === 1 
             ? val 

@@ -4,7 +4,7 @@ import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
 // import { BarLineCombined } from '../QuickD3Chart';
 import { BarLineComboChart } from '@vannizhang/react-d3-charts'
-import { ThemeText } from './InfoText';
+// import { ThemeText } from './InfoText';
 import { AXIS_LINE_COLOR, AXIS_TEXT_COLOR, BAR_COLOR, LINE_COLOR, LINE_WIDTH, TOOLTIP_BACKGROUND_COLOR } from '../QuickD3Chart/constants';
 import { BarLineComboChartDataItem } from '@vannizhang/react-d3-charts/dist/BarLineComboChart/types';
 

@@ -5,13 +5,13 @@ import {
     FeatureWithPathData,
 } from '../../../shared/types';
 
-import { loadModules } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import ICIMSymbol from 'esri/symbols/CIMSymbol';
-import IGraphic from 'esri/Graphic';
-import IPoint from 'esri/geometry/Point';
-import IGraphicsLayer from 'esri/layers/GraphicsLayer';
-import IwatchUtils from 'esri/core/watchUtils';
+// import { loadModules } from 'esri-loader';
+import MapView from '@arcgis/core/views/MapView';
+import CIMSymbol from '@arcgis/core/symbols/CIMSymbol';
+import Graphic from '@arcgis/core/Graphic';
+import Point from '@arcgis/core/geometry/Point';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import { watch } from '@arcgis/core/core/reactiveUtils';
 
 type Props = {
     data: MonthlyUmempolymentDataPaths;
@@ -24,7 +24,7 @@ type Props = {
         min: number;
         max: number;
     };
-    mapView?: IMapView;
+    mapView?: MapView;
 };
 
 const STROKE_WIDTH = 1.5;
@@ -40,44 +40,38 @@ const SparklineLayer: React.FC<Props> = ({
 }) => {
     const renderDealy = useRef<NodeJS.Timeout>();
 
-    const layerRef = useRef<IGraphicsLayer>();
+    const layerRef = useRef<GraphicsLayer>();
 
     const [isLayerInVisibleScale, setIsLayerInVisibleScale] = useState<boolean>(
         false
     );
 
-    const init = async () => {
-        type Modules = [typeof IGraphicsLayer, typeof IwatchUtils];
+    const init = () => {
+        layerRef.current = new GraphicsLayer({
+            minScale: visibleScale && visibleScale.min,
+            maxScale: visibleScale && visibleScale.max,
+            visible: false,
+        });
 
-        try {
-            const [GraphicsLayer, watchUtils] = await (loadModules([
-                'esri/layers/GraphicsLayer',
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
+        mapView.map.add(layerRef.current);
 
-            layerRef.current = new GraphicsLayer({
-                minScale: visibleScale && visibleScale.min,
-                maxScale: visibleScale && visibleScale.max,
-                visible: false,
-            });
-
-            mapView.map.add(layerRef.current);
-
-            watchUtils.whenTrue(mapView, 'stationary', () => {
-                const isInVisibleScale =
-                    mapView.scale < visibleScale.min &&
-                    mapView.scale > visibleScale.max;
-                setIsLayerInVisibleScale(isInVisibleScale);
-            });
-        } catch (err) {
-            console.error(err);
-        }
+        watch(
+            () => mapView.stationary,
+            (stationary) => {
+                console.log(stationary)
+                if(stationary){
+                    const isInVisibleScale =
+                        mapView.scale < visibleScale.min &&
+                        mapView.scale > visibleScale.max;
+                    setIsLayerInVisibleScale(isInVisibleScale);
+                }
+        });
     };
 
-    const draw = async () => {
+    const draw = () => {
         const layer = layerRef.current;
 
-        type Modules = [typeof ICIMSymbol, typeof IGraphic, typeof IPoint];
+        // type Modules = [typeof ICIMSymbol, typeof IGraphic, typeof IPoint];
 
         const nationalLevelPathData =
             nationalLevelData.features[0].PctUnemployed.path;
@@ -85,64 +79,118 @@ const SparklineLayer: React.FC<Props> = ({
 
         // console.log(nationalLevelData);
 
-        try {
-            const [CIMSymbol, Graphic, Point] = await (loadModules([
-                'esri/symbols/CIMSymbol',
-                'esri/Graphic',
-                'esri/geometry/Point',
-            ]) as Promise<Modules>);
+        const { features, frames } = data;
 
-            const { features, frames } = data;
+        const frame = showDeviation
+            ? frames.PctUnemployedDeviation
+            : frames.PctUnemployed; // frames.PctUnemployed;
 
-            const frame = showDeviation
-                ? frames.PctUnemployedDeviation
-                : frames.PctUnemployed; // frames.PctUnemployed;
+        const addGraphicsByChunk = (startIndex = 0) => {
+            // console.log('doChunk', startIndex)
+            const chunckNum = 800;
+            const endIndex =
+                startIndex + chunckNum < features.length
+                    ? startIndex + chunckNum
+                    : features.length;
 
-            const addGraphicsByChunk = (startIndex = 0) => {
-                // console.log('doChunk', startIndex)
-                const chunckNum = 800;
-                const endIndex =
-                    startIndex + chunckNum < features.length
-                        ? startIndex + chunckNum
-                        : features.length;
+            const data: FeatureWithPathData[] = features.slice(
+                startIndex,
+                endIndex
+            );
 
-                const data: FeatureWithPathData[] = features.slice(
-                    startIndex,
-                    endIndex
-                );
+            const graphics = data.map((feature) => {
+                const {
+                    geometry,
+                    PctUnemployed,
+                    PctUnemployedDeviation,
+                } = feature;
 
-                const graphics = data.map((feature) => {
-                    const {
-                        geometry,
-                        PctUnemployed,
-                        PctUnemployedDeviation,
-                    } = feature;
+                const pathData = showDeviation
+                    ? PctUnemployedDeviation
+                    : PctUnemployed;
 
-                    const pathData = showDeviation
-                        ? PctUnemployedDeviation
-                        : PctUnemployed;
+                const anchorPoint = {
+                    x: 0,
+                    y: showDeviation ? 0 : -0.5,
+                };
 
-                    const anchorPoint = {
-                        x: 0,
-                        y: showDeviation ? 0 : -0.5,
-                    };
+                const size = showDeviation ? 60 : 30;
 
-                    const size = showDeviation ? 60 : 30;
+                const { path } = pathData;
 
-                    const { path } = pathData;
+                // const color = [50, 100, 255, 255];
 
-                    // const color = [50, 100, 255, 255];
-
-                    // Create the CIM symbol:
-                    //  - set the size value
-                    //  - assign the generated path to the marker's geometry
-                    const symbol = new CIMSymbol({
-                        data: {
-                            type: 'CIMSymbolReference',
-                            symbol: {
-                                type: 'CIMPointSymbol',
-                                symbolLayers: [
-                                    {
+                // Create the CIM symbol:
+                //  - set the size value
+                //  - assign the generated path to the marker's geometry
+                const symbol = new CIMSymbol({
+                    data: {
+                        type: 'CIMSymbolReference',
+                        symbol: {
+                            type: 'CIMPointSymbol',
+                            symbolLayers: [
+                                {
+                                    type: 'CIMVectorMarker',
+                                    anchorPoint,
+                                    anchorPointUnits: 'Relative',
+                                    enable: true,
+                                    scaleSymbolsProportionally: false,
+                                    respectFrame: true,
+                                    size,
+                                    frame,
+                                    markerGraphics: [
+                                        {
+                                            type: 'CIMMarkerGraphic',
+                                            geometry: {
+                                                paths: [path],
+                                            },
+                                            symbol: {
+                                                type: 'CIMLineSymbol',
+                                                symbolLayers: [
+                                                    {
+                                                        type:
+                                                            'CIMSolidStroke',
+                                                        width: STROKE_WIDTH,
+                                                        color,
+                                                    } as any,
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                                !showDeviation
+                                    ? {
+                                          type: 'CIMVectorMarker',
+                                          anchorPoint,
+                                          anchorPointUnits: 'Relative',
+                                          enable: true,
+                                          scaleSymbolsProportionally: false,
+                                          respectFrame: true,
+                                          size,
+                                          frame: nationalLevelFrame,
+                                          markerGraphics: [
+                                              {
+                                                  type: 'CIMMarkerGraphic',
+                                                  geometry: {
+                                                      paths: [
+                                                          nationalLevelPathData,
+                                                      ],
+                                                  },
+                                                  symbol: {
+                                                      type: 'CIMLineSymbol',
+                                                      symbolLayers: [
+                                                          {
+                                                              type:
+                                                                  'CIMSolidStroke',
+                                                              width: STROKE_WIDTH,
+                                                              color: referenceLineColor,
+                                                          },
+                                                      ],
+                                                  },
+                                              },
+                                          ],
+                                      }
+                                    : {
                                         type: 'CIMVectorMarker',
                                         anchorPoint,
                                         anchorPointUnits: 'Relative',
@@ -155,7 +203,15 @@ const SparklineLayer: React.FC<Props> = ({
                                             {
                                                 type: 'CIMMarkerGraphic',
                                                 geometry: {
-                                                    paths: [path],
+                                                    paths: [
+                                                        [
+                                                            [0, 0],
+                                                            [
+                                                                frame.xmax,
+                                                                0,
+                                                            ],
+                                                        ],
+                                                    ],
                                                 },
                                                 symbol: {
                                                     type: 'CIMLineSymbol',
@@ -164,116 +220,41 @@ const SparklineLayer: React.FC<Props> = ({
                                                             type:
                                                                 'CIMSolidStroke',
                                                             width: STROKE_WIDTH,
-                                                            color,
-                                                        } as any,
+                                                            color: referenceLineColor,
+                                                        },
                                                     ],
                                                 },
                                             },
                                         ],
-                                    },
-                                    !showDeviation
-                                        ? {
-                                              type: 'CIMVectorMarker',
-                                              anchorPoint,
-                                              anchorPointUnits: 'Relative',
-                                              enable: true,
-                                              scaleSymbolsProportionally: false,
-                                              respectFrame: true,
-                                              size,
-                                              frame: nationalLevelFrame,
-                                              markerGraphics: [
-                                                  {
-                                                      type: 'CIMMarkerGraphic',
-                                                      geometry: {
-                                                          paths: [
-                                                              nationalLevelPathData,
-                                                          ],
-                                                      },
-                                                      symbol: {
-                                                          type: 'CIMLineSymbol',
-                                                          symbolLayers: [
-                                                              {
-                                                                  type:
-                                                                      'CIMSolidStroke',
-                                                                  width: STROKE_WIDTH,
-                                                                  color: referenceLineColor,
-                                                              },
-                                                          ],
-                                                      },
-                                                  },
-                                              ],
-                                          }
-                                        : null,
-                                    showDeviation
-                                        ? {
-                                              type: 'CIMVectorMarker',
-                                              anchorPoint,
-                                              anchorPointUnits: 'Relative',
-                                              enable: true,
-                                              scaleSymbolsProportionally: false,
-                                              respectFrame: true,
-                                              size,
-                                              frame,
-                                              markerGraphics: [
-                                                  {
-                                                      type: 'CIMMarkerGraphic',
-                                                      geometry: {
-                                                          paths: [
-                                                              [
-                                                                  [0, 0],
-                                                                  [
-                                                                      frame.xmax,
-                                                                      0,
-                                                                  ],
-                                                              ],
-                                                          ],
-                                                      },
-                                                      symbol: {
-                                                          type: 'CIMLineSymbol',
-                                                          symbolLayers: [
-                                                              {
-                                                                  type:
-                                                                      'CIMSolidStroke',
-                                                                  width: STROKE_WIDTH,
-                                                                  color: referenceLineColor,
-                                                              },
-                                                          ],
-                                                      },
-                                                  },
-                                              ],
-                                          }
-                                        : null,
-                                ],
-                            },
+                                    }
+                            ],
                         },
-                    });
-
-                    const graphic = new Graphic({
-                        geometry: new Point({
-                            latitude: geometry.y,
-                            longitude: geometry.x,
-                        }),
-                        symbol,
-                    });
-
-                    return graphic;
+                    },
                 });
 
-                layer.addMany(graphics);
+                const graphic = new Graphic({
+                    geometry: new Point({
+                        latitude: geometry.y,
+                        longitude: geometry.x,
+                    }),
+                    symbol,
+                });
 
-                if (startIndex + chunckNum < features.length) {
-                    renderDealy.current = setTimeout(() => {
-                        addGraphicsByChunk(startIndex + chunckNum);
-                    }, 1);
-                } else {
-                    layer.visible = true;
-                }
-            };
+                return graphic;
+            });
 
-            addGraphicsByChunk(0);
-        } catch (err) {
-            console.error(err);
-        }
+            layer.addMany(graphics);
+
+            if (startIndex + chunckNum < features.length) {
+                renderDealy.current = setTimeout(() => {
+                    addGraphicsByChunk(startIndex + chunckNum);
+                }, 1);
+            } else {
+                layer.visible = true;
+            }
+        };
+
+        addGraphicsByChunk(0);
     };
 
     useEffect(() => {

@@ -75,9 +75,9 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
+    "@arcgis/core": "^4.29.10",
     "@esri/arcgis-rest-feature-service": "^4.0.4",
     "@reduxjs/toolkit": "1.8",
-    "@types/arcgis-js-api": "^4.23.1",
     "@types/d3": "^7.4.0",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
@@ -85,7 +85,6 @@
     "axios": "^0.21.2",
     "classnames": "^2.2.6",
     "d3": "^7.8.5",
-    "esri-loader": "^3.5.0",
     "helper-toolkit-ts": "^1.1.13",
     "isomorphic-fetch": "^3.0.0",
     "isomorphic-form-data": "^2.0.0",

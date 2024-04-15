@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-import { loadModules } from 'esri-loader';
+// import { loadModules } from 'esri-loader';
 
-import IMapView from 'esri/views/MapView';
-import IFeatureLayer from 'esri/layers/FeatureLayer';
+import IMapView from '@arcgis/core/views/MapView';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 // import IPoint from 'esri/geometry/Point';
-import IGraphic from 'esri/Graphic';
+import IGraphic from '@arcgis/core/Graphic';
 // import IFeatureLayerView from 'esri/views/layers/FeatureLayerView';
 
 type Props = {
@@ -38,7 +38,7 @@ const QueryTaskLayer: React.FC<Props> = ({
     // pointerOnMove,
     // featureOnHover,
 }) => {
-    const layerRef = useRef<IFeatureLayer>();
+    const layerRef = useRef<FeatureLayer>();
     // const layerViewRef = useRef<IFeatureLayerView>();
     // const mouseMoveDelay = useRef<number>();
 
@@ -50,52 +50,30 @@ const QueryTaskLayer: React.FC<Props> = ({
     };
 
     const init = async () => {
-        type Modules = [typeof IFeatureLayer];
 
-        try {
-            const [FeatureLayer] = await (loadModules([
-                'esri/layers/FeatureLayer',
-            ]) as Promise<Modules>);
+        const layer = new FeatureLayer({
+            url,
+            // portalItem: {
+            //     id: itemId
+            // },
+            minScale: visibleScale && visibleScale.min,
+            maxScale: visibleScale && visibleScale.max,
+            visible: false,
+            popupEnabled: false,
+            outFields,
+            opacity: 0,
+        });
 
-            const layer = new FeatureLayer({
-                url,
-                // portalItem: {
-                //     id: itemId
-                // },
-                minScale: visibleScale && visibleScale.min,
-                maxScale: visibleScale && visibleScale.max,
-                visible: false,
-                popupEnabled: false,
-                outFields,
-                opacity: 0,
-            });
+        mapView.map.add(layer);
 
-            mapView.map.add(layer);
+        layerRef.current = layer;
+        // layerViewRef.current = layerView;
 
-            layerRef.current = layer;
-            // layerViewRef.current = layerView;
-
-            if (FIPS) {
-                queryFeatureByFIPS();
-            }
-
-            initEventListeners();
-
-            // mapView.whenLayerView(layer).then((layerView) => {
-            //     // console.log(layerView)
-
-            //     layerRef.current = layer;
-            //     layerViewRef.current = layerView;
-
-            //     if (defaultFIPS) {
-            //         queryDefaultFeature();
-            //     }
-
-            //     initEventListeners();
-            // });
-        } catch (err) {
-            console.error(err);
+        if (FIPS) {
+            queryFeatureByFIPS();
         }
+
+        initEventListeners();
     };
 
     const queryFeatureByFIPS = () => {
@@ -110,7 +88,7 @@ const QueryTaskLayer: React.FC<Props> = ({
         event,
         where,
     }: {
-        event?: __esri.MapViewClickEvent;
+        event?: __esri.ViewClickEvent;
         where?: string;
     }) => {
         // console.log(mapView.scale)

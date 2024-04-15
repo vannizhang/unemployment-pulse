@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 
-import { loadModules, loadCss, setDefaultOptions } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IWebMap from 'esri/WebMap';
-import IwatchUtils from 'esri/core/watchUtils';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import { watch } from '@arcgis/core/core/reactiveUtils';
 
 import {
     updateMapLocation,
@@ -13,9 +12,6 @@ import {
 
 import { AppContext, AppContextValue } from '../../contexts/AppContextProvider';
 
-setDefaultOptions({ version: '4.18'})
-loadCss();
-
 interface Props {
     webmapId: string;
     children?: React.ReactNode;
@@ -23,62 +19,50 @@ interface Props {
 
 const defaultMapLocation = getDefaultValueFromHashParams('@') as MapLocation;
 
-const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
+const MapViewComponent: React.FC<Props> = ({ webmapId, children }: Props) => {
     const mapDivRef = React.useRef<HTMLDivElement>();
 
     const { isMobileDevice } = useContext<AppContextValue>(AppContext);
 
-    const [mapView, setMapView] = React.useState<IMapView>(null);
+    const [mapView, setMapView] = React.useState<MapView>(null);
 
-    const initMapView = async () => {
-        type Modules = [typeof IMapView, typeof IWebMap];
+    const initMapView = () => {
 
-        try {
-            const [MapView, WebMap] = await (loadModules([
-                'esri/views/MapView',
-                'esri/WebMap',
-            ]) as Promise<Modules>);
+        const { lat, lon, zoom } = defaultMapLocation || {};
 
-            const { lat, lon, zoom } = defaultMapLocation || {};
+        const center = lon && lat ? [lon, lat] : undefined;
 
-            const center = lon && lat ? [lon, lat] : undefined;
-
-            const view = new MapView({
-                container: mapDivRef.current,
-                map: new WebMap({
-                    portalItem: {
-                        id: webmapId,
-                    },
-                }),
-                center,
-                zoom,
-                padding: {
-                    top: 60,
+        const view = new MapView({
+            container: mapDivRef.current,
+            map: new WebMap({
+                portalItem: {
+                    id: webmapId,
                 },
-            });
+            }),
+            center,
+            zoom,
+            padding: {
+                top: 60,
+            },
+        });
 
-            if (isMobileDevice) {
-                view.ui.remove('zoom');
-            }
-
-            view.when(() => {
-                setMapView(view);
-            });
-        } catch (err) {
-            console.error(err);
+        if (isMobileDevice) {
+            view.ui.remove('zoom');
         }
+
+        view.when(() => {
+            setMapView(view);
+        });
     };
 
     const addWatchEvent = async () => {
-        type Modules = [typeof IwatchUtils];
 
-        try {
-            const [watchUtils] = await (loadModules([
-                'esri/core/watchUtils',
-            ]) as Promise<Modules>);
-
-            watchUtils.whenTrue(mapView, 'stationary', () => {
-                // console.log('mapview is stationary', mapView.center, mapView.zoom);
+        watch(
+            () => mapView.stationary,
+            (stationary) => {
+                if(!stationary){
+                    return
+                }
 
                 if (mapView.zoom === -1) {
                     return;
@@ -99,10 +83,8 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
                 };
 
                 updateMapLocation(centerLocation);
-            });
-        } catch (err) {
-            console.error(err);
-        }
+            }
+        );
     };
 
     React.useEffect(() => {
@@ -141,4 +123,4 @@ const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
     );
 };
 
-export default MapView;
+export default MapViewComponent;

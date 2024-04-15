@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { loadModules } from 'esri-loader';
-import IMapView from 'esri/views/MapView';
-import IGraphic from 'esri/Graphic';
-import IGraphicsLayer from 'esri/layers/GraphicsLayer';
-import ISimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import IPolygon from 'esri/geometry/Polygon';
+// import { loadModules } from 'esri-loader';
+import IMapView from '@arcgis/core/views/MapView';
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Polygon from '@arcgis/core/geometry/Polygon';
 // import {
 //     SPARKLINE_COLOR_ORANGE,
 //     THEME_COLOR_ORANGE,
@@ -15,48 +15,26 @@ import IPolygon from 'esri/geometry/Polygon';
 // import IwatchUtils from 'esri/core/watchUtils';
 
 type Props = {
-    queryResult: IGraphic;
+    queryResult: Graphic;
     mapView?: IMapView;
 };
 
 const QueryResult: React.FC<Props> = ({ queryResult, mapView }: Props) => {
-    const [graphicLayer, setGraphicLayer] = useState<IGraphicsLayer>();
+    const [graphicLayer, setGraphicLayer] = useState<GraphicsLayer>();
 
-    const init = async () => {
-        type Modules = [typeof IGraphicsLayer];
+    const init =  () => {
+        const layer = new GraphicsLayer({
+            // opacity: 0.3,
+            blendMode: 'overlay',
+            // effect: 'blur(3px)',
+        });
 
-        try {
-            const [GraphicsLayer] = await (loadModules([
-                'esri/layers/GraphicsLayer',
-            ]) as Promise<Modules>);
+        mapView.map.add(layer, 0);
 
-            const layer = new GraphicsLayer({
-                // opacity: 0.3,
-                blendMode: 'overlay',
-                // effect: 'blur(3px)',
-            });
-
-            mapView.map.add(layer, 0);
-
-            setGraphicLayer(layer);
-        } catch (err) {
-            console.error(err);
-        }
+        setGraphicLayer(layer);
     };
 
-    const showQueryResult = async () => {
-        type Modules = [
-            typeof IGraphic,
-            typeof IPolygon,
-            typeof ISimpleFillSymbol
-        ];
-
-        const [Graphic, Polygon, SimpleFillSymbol] = await (loadModules([
-            'esri/Graphic',
-            'esri/geometry/Polygon',
-            'esri/symbols/SimpleFillSymbol',
-        ]) as Promise<Modules>);
-
+    const showQueryResult = () => {
         const graphic = new Graphic({
             geometry: new Polygon(queryResult.geometry),
         });

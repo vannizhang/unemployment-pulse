@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 // const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports =  (env, options)=> {
 
@@ -113,7 +113,7 @@ module.exports =  (env, options)=> {
                 }
             }),
             // !devMode ? new CleanWebpackPlugin() : false,
-            // !devMode ? new BundleAnalyzerPlugin() : false
+            !devMode ? new BundleAnalyzerPlugin() : false
         ].filter(Boolean),
         optimization: {
             splitChunks: {

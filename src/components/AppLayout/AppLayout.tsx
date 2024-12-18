@@ -31,12 +31,13 @@ import {
 } from '../../constants/style';
 import { UnempolymentData } from '../../../shared/types';
 
-import IGraphic from 'esri/Graphic';
+// import IGraphic from 'esri/Graphic';
 
 import {
     updateFIPSInURLHashParams,
     getDefaultValueFromHashParams,
 } from '../../utils/URLHashParams';
+import Graphic from '@arcgis/core/Graphic';
 
 const defaultFIPS = getDefaultValueFromHashParams('fips') as string;
 // console.log(defaultFIPS)
@@ -59,7 +60,7 @@ const AppLayout = () => {
 
     const [showDeviation, setShowDeviation] = useState<boolean>(false);
 
-    const [selectedFeature, setSelectedFeature] = useState<IGraphic>();
+    const [selectedFeature, setSelectedFeature] = useState<Graphic>();
 
     const [showAbout, setShowAbout] = useState<boolean>(false);
 

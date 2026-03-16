@@ -1,7 +1,7 @@
 // ArcGIS REST JS is supported in Node.js 8.x and above. It requires additional packages to polyfill Fetch and FormData.
 // require('isomorphic-form-data');
 // const fetch = require('node-fetch');
-import { IQueryFeaturesResponse, queryFeatures } from '@esri/arcgis-rest-feature-service';
+import { IFeature, IQueryFeaturesResponse, queryFeatures } from '@esri/arcgis-rest-feature-service';
 import {
     getStateAbbrev
 } from './getStateAbbrev';
@@ -16,44 +16,108 @@ type PopulationLookup = {
     }
 }
 
+/**
+ * ACS Population (Latest)
+ * @see https://www.arcgis.com/home/item.html?id=60c98f20a162416ea1725b94d7297f83
+ */
+const ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL = 'https://p3eplmys2rvchkjx.svcs.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/ACS_Population_View_Boundaries/FeatureServer';
+
+
 export const populationLookup:PopulationLookup = {};
 
-const ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL = 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/ACS_Total_Population_Boundaries/FeatureServer';
+/**
+ * This helper function is used to query all features from a feature service layer. 
+ * It handles pagination by checking the exceededTransferLimit property in the response and using resultOffset to fetch the next set of features until all features are retrieved.
+ * @param url 
+ * @param params 
+ * @returns 
+ */
+const queryFeaturesHelper = async(url:string, params:any):Promise<IFeature[]>=>{
+    const features: IFeature[] = [];
+
+    let resultOffset = 0;
+    let hasMore = true;
+
+    while(hasMore){
+        const response = await queryFeatures({
+            url,
+            params: {
+                ...params,
+                resultOffset
+            }
+        }) as IQueryFeaturesResponse;
+
+        if(response && response.features){
+            features.push(...response.features);
+            if(response.exceededTransferLimit){
+                resultOffset += response.features.length;
+            }
+            else {
+                hasMore = false;
+            }
+        }
+        else {
+            hasMore = false;
+        }
+    }
+
+    return features;
+}
+
 
 export const downloadACSData = async()=>{
 
     const outFields = ['GEOID','NAME','B01001_001E'];
 
-    const queryResponse4States = await queryFeatures({
-        url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/0`,
-        where: '1=1',
-        outFields,
-        returnGeometry: false,
-        f: 'json'
-    }) as IQueryFeaturesResponse
+    // const queryResponse4States = await queryFeatures({
+    //     url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/0`,
+    //     where: '1=1',
+    //     outFields,
+    //     returnGeometry: false,
+    //     f: 'json'
+    // }) as IQueryFeaturesResponse
 
-    const queryResponse4Counties1 = await queryFeatures({
-        url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/1/query`,
-        where: '1=1',
-        outFields,
-        returnGeometry: false,
-        f: 'json'
-    }) as IQueryFeaturesResponse
+    const features4States = await queryFeaturesHelper(
+        `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/0/query`,
+        {   
+            where: '1=1',
+            outFields,
+            returnGeometry: false,
+            f: 'json'
+        }
+    )   
 
-    const queryResponse4Counties2 = await queryFeatures({
-        url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/1/query`,
-        where: '1=1',
-        outFields,
-        returnGeometry: false,
-        resultOffset: 2000,
-        f: 'json'
-    }) as IQueryFeaturesResponse
+    // const queryResponse4Counties1 = await queryFeatures({
+    //     url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/1/query`,
+    //     where: '1=1',
+    //     outFields,
+    //     returnGeometry: false,
+    //     f: 'json'
+    // }) as IQueryFeaturesResponse
 
-    if(queryResponse4States && queryResponse4States.features){
+    // const queryResponse4Counties2 = await queryFeatures({
+    //     url: `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/1/query`,
+    //     where: '1=1',
+    //     outFields,
+    //     returnGeometry: false,
+    //     resultOffset: 2000,
+    //     f: 'json'
+    // }) as IQueryFeaturesResponse
+    const features4Counties = await queryFeaturesHelper(
+        `${ACS_TOTAL_POPULATION_FEATURE_SERVICE_URL}/1/query`,
+        {
+            where: '1=1',
+            outFields,
+            returnGeometry: false,
+            f: 'json'
+        }
+    )
 
-        const { features } = queryResponse4States;
+    if(features4States && features4States.length > 0){
 
-        for(let feature of features){
+        // const { features } = queryResponse4States;
+
+        for(let feature of features4States){
             const {
                 GEOID,
                 NAME,
@@ -68,15 +132,9 @@ export const downloadACSData = async()=>{
     }
 
     if(
-        queryResponse4Counties1 && 
-        queryResponse4Counties1.features &&
-        queryResponse4Counties2 && 
-        queryResponse4Counties2.features
+        features4Counties && features4Counties.length > 0
     ){
-        const features = [
-            ...queryResponse4Counties1.features,
-            ...queryResponse4Counties2.features
-        ]
+        const features = features4Counties
 
         for(let feature of features){
             const {
@@ -100,6 +158,7 @@ export const downloadACSData = async()=>{
 
             const stateName = getStateAbbrev(GEOID.slice(0,2));
 
+            // for DC, use the state name as the county name since it's a city and county in one
             const name = GEOID === '11001' 
                 ? stateName 
                 : countyName + ', ' + stateName;

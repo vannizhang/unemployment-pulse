@@ -176,20 +176,20 @@ const processQueryResult = (features:MonthlyUnemploymentFeature[], shouldExlcude
         } = attributes;
 
         const PctUnemployed = [
-            PctUnemployed_13Month,
-            PctUnemployed_12Month,
-            PctUnemployed_11Month,
-            PctUnemployed_10Month,
-            PctUnemployed_09Month,
-            PctUnemployed_08Month,
-            PctUnemployed_07Month,
-            PctUnemployed_06Month,
-            PctUnemployed_05Month,
-            PctUnemployed_04Month,
-            PctUnemployed_03Month,
-            PctUnemployed_02Month,
-            PctUnemployed_01Month,
-            PctUnemployed_CurrentMonth
+            PctUnemployed_13Month || 0,
+            PctUnemployed_12Month || 0,
+            PctUnemployed_11Month || 0,
+            PctUnemployed_10Month || 0,
+            PctUnemployed_09Month || 0,
+            PctUnemployed_08Month || 0,
+            PctUnemployed_07Month || 0,
+            PctUnemployed_06Month || 0,
+            PctUnemployed_05Month || 0,
+            PctUnemployed_04Month || 0,
+            PctUnemployed_03Month || 0,
+            PctUnemployed_02Month || 0,
+            PctUnemployed_01Month || 0,
+            PctUnemployed_CurrentMonth || 0
         ];
 
         maxPctUnemployed = Math.max(maxPctUnemployed, Math.max(...PctUnemployed))

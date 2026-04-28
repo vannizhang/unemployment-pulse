@@ -4,10 +4,11 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "target": "es6",
-        "moduleResolution": "node",
+        // "moduleResolution": "node",
         "removeComments": true,
         "sourceMap": false,
         "resolveJsonModule": true,
+        "rootDir": "./src",
         "outDir": "compiled",
         "types": [
             "node"
@@ -16,6 +17,7 @@
             "./types"
         ],
         "lib": ["es2015", "dom"],
+        "strict": false
     },
     "exclude": [
         "node_modules", 
